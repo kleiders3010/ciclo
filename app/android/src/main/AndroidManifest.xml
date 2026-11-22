@@ -7,7 +7,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <!-- On-time reminders (D43): asked when a reminder first needs it. -->
+    <!-- Reminders (Reminders.kt): set again after a restart. No exact-alarm permission: a 10-minute window. -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <!-- Same-Wi-Fi discovery beacons (multicast) while the app is open (§6). -->
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
     <application
@@ -50,6 +51,14 @@
         <!-- Measurement only (Measure.kt): the "more often" alarm, and the adb switch, which
              only holders of DUMP (the adb shell) can reach. Off by default; no UI. -->
         <receiver android:name=".MoreOftenReceiver" android:exported="false" />
+        <!-- Reminders: our own alarms and the pill's "Taken" button (not exported), and the restart events. -->
+        <receiver android:name=".ReminderReceiver" android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+            </intent-filter>
+        </receiver>
         <receiver
             android:name=".MeasureReceiver"
             android:exported="true"

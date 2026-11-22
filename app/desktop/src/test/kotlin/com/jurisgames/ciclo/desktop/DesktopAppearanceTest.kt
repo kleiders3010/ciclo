@@ -24,28 +24,16 @@ class DesktopAppearanceTest {
     private fun shown(tag: String) = rule.onAllNodes(hasTestTag(tag), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty()
 
     @Test
-    fun listStyleAndTheme() {
+    fun themeIsPerDevice() {
         val home = Files.createTempDirectory("kt-look").toFile()
         val options = NodeOptions(Platform.DESKTOP, listOf("ws://127.0.0.1:9"), false, false, "127.0.0.1:0", "", "")
         val n = KtNode.open(File(home, "identity").path, File(home, "data").path, System.getProperty("kt.worker"), options)
-        n.createList(null, "Groceries")
+        // Ciclo has no lists (the list-style half of this test came from Sobres): the theme half stays.
         rule.setContent { CicloApp(n) }
-        rule.waitUntil(5_000) { shown("list-Groceries") }
-        check(shown("dot-Groceries") && !shown("icon-Groceries")) { "grey dot, no icon yet" }
-        rule.onNodeWithTag("list-Groceries").performClick()
-        rule.onNodeWithTag("listMenu").performClick()
-        rule.onNodeWithTag("styleOpen").performClick()
-        rule.onNodeWithTag("hue-130").performClick()
-        rule.onNodeWithTag("vivid-2").performClick()
-        rule.onNodeWithTag("pick-cart").performClick()
-        rule.onNodeWithTag("styleSave").performClick()
-        rule.waitUntil(5_000) { shown("icon-Groceries") }
-        val l = n.lists().single { it.name == "Groceries" }
-        check(l.hue == 130.0 && l.vivid.toInt() == 2 && l.icon == "cart") { l.toString() }
-
         // Themes are per device and decide the tone: same hue, different color.
-        val before = accentColor("default", l.hue, l.vivid, false)
-        check(before != accentColor("default", l.hue, l.vivid, true)) { "dark mode has its own tone" }
+        val before = accentColor("default", 130.0, 2u.toUByte(), false)
+        check(before != accentColor("default", 130.0, 2u.toUByte(), true)) { "dark mode has its own tone" }
+        rule.waitUntil(5_000) { shown("settingsOpen") }
         rule.onNodeWithTag("settingsOpen").performClick()
         rule.waitUntil(5_000) { shown("theme-ocean") }
         check(!shown("set-dynamic")) { "no wallpaper colors on desktop" }

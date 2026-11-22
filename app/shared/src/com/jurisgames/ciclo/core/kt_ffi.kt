@@ -775,6 +775,8 @@ internal object IntegrityCheckingUniffiLib {
     ): Int
     external fun uniffi_kt_ffi_checksum_method_ktnode_diagnostics(
     ): Int
+    external fun uniffi_kt_ffi_checksum_method_ktnode_dismiss_join(
+    ): Int
     external fun uniffi_kt_ffi_checksum_method_ktnode_display_name(
     ): Int
     external fun uniffi_kt_ffi_checksum_method_ktnode_export_list_file(
@@ -784,6 +786,8 @@ internal object IntegrityCheckingUniffiLib {
     external fun uniffi_kt_ffi_checksum_method_ktnode_first_round_done(
     ): Int
     external fun uniffi_kt_ffi_checksum_method_ktnode_flush(
+    ): Int
+    external fun uniffi_kt_ffi_checksum_method_ktnode_group_sync(
     ): Int
     external fun uniffi_kt_ffi_checksum_method_ktnode_groups(
     ): Int
@@ -829,11 +833,15 @@ internal object IntegrityCheckingUniffiLib {
     ): Int
     external fun uniffi_kt_ffi_checksum_method_ktnode_people(
     ): Int
+    external fun uniffi_kt_ffi_checksum_method_ktnode_recent_joins(
+    ): Int
     external fun uniffi_kt_ffi_checksum_method_ktnode_recent_links(
     ): Int
     external fun uniffi_kt_ffi_checksum_method_ktnode_relay_stats(
     ): Int
     external fun uniffi_kt_ffi_checksum_method_ktnode_remove_image(
+    ): Int
+    external fun uniffi_kt_ffi_checksum_method_ktnode_remove_joined(
     ): Int
     external fun uniffi_kt_ffi_checksum_method_ktnode_remove_replaced_device(
     ): Int
@@ -911,6 +919,8 @@ internal object IntegrityCheckingUniffiLib {
     ): Int
     external fun uniffi_kt_ffi_checksum_method_ktnode_budget_activity(
     ): Int
+    external fun uniffi_kt_ffi_checksum_method_ktnode_budget_export_csv(
+    ): Int
     external fun uniffi_kt_ffi_checksum_method_ktnode_budget_unreadable(
     ): Int
     external fun uniffi_kt_ffi_checksum_method_ktnode_delete_account(
@@ -922,8 +932,6 @@ internal object IntegrityCheckingUniffiLib {
     external fun uniffi_kt_ffi_checksum_method_ktnode_delete_repeating_and_entries(
     ): Int
     external fun uniffi_kt_ffi_checksum_method_ktnode_delete_tx(
-    ): Int
-    external fun uniffi_kt_ffi_checksum_method_ktnode_export_csv(
     ): Int
     external fun uniffi_kt_ffi_checksum_method_ktnode_fill_plan(
     ): Int
@@ -952,6 +960,56 @@ internal object IntegrityCheckingUniffiLib {
     external fun uniffi_kt_ffi_checksum_method_ktnode_set_tx(
     ): Int
     external fun uniffi_kt_ffi_checksum_method_ktnode_spending(
+    ): Int
+    external fun uniffi_kt_ffi_checksum_method_ktnode_cycle_add_custom_tag(
+    ): Int
+    external fun uniffi_kt_ffi_checksum_method_ktnode_cycle_calendar(
+    ): Int
+    external fun uniffi_kt_ffi_checksum_method_ktnode_cycle_custom_tags(
+    ): Int
+    external fun uniffi_kt_ffi_checksum_method_ktnode_cycle_day(
+    ): Int
+    external fun uniffi_kt_ffi_checksum_method_ktnode_cycle_days(
+    ): Int
+    external fun uniffi_kt_ffi_checksum_method_ktnode_cycle_delete_custom_tag(
+    ): Int
+    external fun uniffi_kt_ffi_checksum_method_ktnode_cycle_log_period(
+    ): Int
+    external fun uniffi_kt_ffi_checksum_method_ktnode_cycle_outlook(
+    ): Int
+    external fun uniffi_kt_ffi_checksum_method_ktnode_cycle_patterns(
+    ): Int
+    external fun uniffi_kt_ffi_checksum_method_ktnode_cycle_set_bc_taken(
+    ): Int
+    external fun uniffi_kt_ffi_checksum_method_ktnode_cycle_set_flow(
+    ): Int
+    external fun uniffi_kt_ffi_checksum_method_ktnode_cycle_set_note(
+    ): Int
+    external fun uniffi_kt_ffi_checksum_method_ktnode_cycle_set_setting(
+    ): Int
+    external fun uniffi_kt_ffi_checksum_method_ktnode_cycle_set_tag(
+    ): Int
+    external fun uniffi_kt_ffi_checksum_method_ktnode_cycle_set_temp(
+    ): Int
+    external fun uniffi_kt_ffi_checksum_method_ktnode_cycle_set_weight(
+    ): Int
+    external fun uniffi_kt_ffi_checksum_method_ktnode_cycle_settings(
+    ): Int
+    external fun uniffi_kt_ffi_checksum_method_ktnode_export_csv(
+    ): Int
+    external fun uniffi_kt_ffi_checksum_method_ktnode_partner_init(
+    ): Int
+    external fun uniffi_kt_ffi_checksum_method_ktnode_partner_is_view(
+    ): Int
+    external fun uniffi_kt_ffi_checksum_method_ktnode_partner_lists(
+    ): Int
+    external fun uniffi_kt_ffi_checksum_method_ktnode_partner_publish(
+    ): Int
+    external fun uniffi_kt_ffi_checksum_method_ktnode_partner_set_shares(
+    ): Int
+    external fun uniffi_kt_ffi_checksum_method_ktnode_partner_shares(
+    ): Int
+    external fun uniffi_kt_ffi_checksum_method_ktnode_partner_view(
     ): Int
     external fun uniffi_kt_ffi_checksum_method_keyvault_seal(
     ): Int
@@ -1023,6 +1081,8 @@ internal object UniffiLib {
     ): RustBuffer.ByValue
     external fun uniffi_kt_ffi_fn_method_ktnode_diagnostics(`ptr`: Long,uniffi_out_err: UniffiRustCallStatus, 
     ): RustBuffer.ByValue
+    external fun uniffi_kt_ffi_fn_method_ktnode_dismiss_join(`ptr`: Long,`groupId`: RustBuffer.ByValue,`deviceId`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+    ): Unit
     external fun uniffi_kt_ffi_fn_method_ktnode_display_name(`ptr`: Long,uniffi_out_err: UniffiRustCallStatus, 
     ): RustBuffer.ByValue
     external fun uniffi_kt_ffi_fn_method_ktnode_export_list_file(`ptr`: Long,`listId`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
@@ -1033,6 +1093,8 @@ internal object UniffiLib {
     ): Byte
     external fun uniffi_kt_ffi_fn_method_ktnode_flush(`ptr`: Long,`timeoutMs`: Long,uniffi_out_err: UniffiRustCallStatus, 
     ): Int
+    external fun uniffi_kt_ffi_fn_method_ktnode_group_sync(`ptr`: Long,`groupId`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+    ): RustBuffer.ByValue
     external fun uniffi_kt_ffi_fn_method_ktnode_groups(`ptr`: Long,uniffi_out_err: UniffiRustCallStatus, 
     ): RustBuffer.ByValue
     external fun uniffi_kt_ffi_fn_method_ktnode_has_backup_password(`ptr`: Long,uniffi_out_err: UniffiRustCallStatus, 
@@ -1077,11 +1139,15 @@ internal object UniffiLib {
     ): RustBuffer.ByValue
     external fun uniffi_kt_ffi_fn_method_ktnode_people(`ptr`: Long,`listId`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
     ): RustBuffer.ByValue
+    external fun uniffi_kt_ffi_fn_method_ktnode_recent_joins(`ptr`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    ): RustBuffer.ByValue
     external fun uniffi_kt_ffi_fn_method_ktnode_recent_links(`ptr`: Long,uniffi_out_err: UniffiRustCallStatus, 
     ): RustBuffer.ByValue
     external fun uniffi_kt_ffi_fn_method_ktnode_relay_stats(`ptr`: Long,uniffi_out_err: UniffiRustCallStatus, 
     ): RustBuffer.ByValue
     external fun uniffi_kt_ffi_fn_method_ktnode_remove_image(`ptr`: Long,`listId`: RustBuffer.ByValue,`taskId`: RustBuffer.ByValue,`imageId`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+    ): Unit
+    external fun uniffi_kt_ffi_fn_method_ktnode_remove_joined(`ptr`: Long,`groupId`: RustBuffer.ByValue,`deviceId`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
     ): Unit
     external fun uniffi_kt_ffi_fn_method_ktnode_remove_replaced_device(`ptr`: Long,uniffi_out_err: UniffiRustCallStatus, 
     ): Int
@@ -1159,6 +1225,8 @@ internal object UniffiLib {
     ): RustBuffer.ByValue
     external fun uniffi_kt_ffi_fn_method_ktnode_budget_activity(`ptr`: Long,`listId`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
     ): RustBuffer.ByValue
+    external fun uniffi_kt_ffi_fn_method_ktnode_budget_export_csv(`ptr`: Long,`listId`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+    ): RustBuffer.ByValue
     external fun uniffi_kt_ffi_fn_method_ktnode_budget_unreadable(`ptr`: Long,`listId`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
     ): Int
     external fun uniffi_kt_ffi_fn_method_ktnode_delete_account(`ptr`: Long,`listId`: RustBuffer.ByValue,`accountId`: RustBuffer.ByValue,`undo`: Byte,uniffi_out_err: UniffiRustCallStatus, 
@@ -1171,8 +1239,6 @@ internal object UniffiLib {
     ): RustBuffer.ByValue
     external fun uniffi_kt_ffi_fn_method_ktnode_delete_tx(`ptr`: Long,`listId`: RustBuffer.ByValue,`txId`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
     ): Unit
-    external fun uniffi_kt_ffi_fn_method_ktnode_export_csv(`ptr`: Long,`listId`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
-    ): RustBuffer.ByValue
     external fun uniffi_kt_ffi_fn_method_ktnode_fill_plan(`ptr`: Long,`listId`: RustBuffer.ByValue,`rule`: RustBuffer.ByValue,`today`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
     ): RustBuffer.ByValue
     external fun uniffi_kt_ffi_fn_method_ktnode_finish_reconcile(`ptr`: Long,`listId`: RustBuffer.ByValue,`accountId`: RustBuffer.ByValue,`date`: RustBuffer.ByValue,`statement`: Long,uniffi_out_err: UniffiRustCallStatus, 
@@ -1200,6 +1266,56 @@ internal object UniffiLib {
     external fun uniffi_kt_ffi_fn_method_ktnode_set_tx(`ptr`: Long,`listId`: RustBuffer.ByValue,`txId`: RustBuffer.ByValue,`tx`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
     ): RustBuffer.ByValue
     external fun uniffi_kt_ffi_fn_method_ktnode_spending(`ptr`: Long,`listId`: RustBuffer.ByValue,`from`: RustBuffer.ByValue,`to`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+    ): RustBuffer.ByValue
+    external fun uniffi_kt_ffi_fn_method_ktnode_cycle_add_custom_tag(`ptr`: Long,`listId`: RustBuffer.ByValue,`name`: RustBuffer.ByValue,`cat`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+    ): RustBuffer.ByValue
+    external fun uniffi_kt_ffi_fn_method_ktnode_cycle_calendar(`ptr`: Long,`listId`: RustBuffer.ByValue,`today`: RustBuffer.ByValue,`from`: RustBuffer.ByValue,`to`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+    ): RustBuffer.ByValue
+    external fun uniffi_kt_ffi_fn_method_ktnode_cycle_custom_tags(`ptr`: Long,`listId`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+    ): RustBuffer.ByValue
+    external fun uniffi_kt_ffi_fn_method_ktnode_cycle_day(`ptr`: Long,`listId`: RustBuffer.ByValue,`date`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+    ): RustBuffer.ByValue
+    external fun uniffi_kt_ffi_fn_method_ktnode_cycle_days(`ptr`: Long,`listId`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+    ): RustBuffer.ByValue
+    external fun uniffi_kt_ffi_fn_method_ktnode_cycle_delete_custom_tag(`ptr`: Long,`listId`: RustBuffer.ByValue,`tagId`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+    ): Unit
+    external fun uniffi_kt_ffi_fn_method_ktnode_cycle_log_period(`ptr`: Long,`listId`: RustBuffer.ByValue,`start`: RustBuffer.ByValue,`days`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    ): Unit
+    external fun uniffi_kt_ffi_fn_method_ktnode_cycle_outlook(`ptr`: Long,`listId`: RustBuffer.ByValue,`today`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+    ): RustBuffer.ByValue
+    external fun uniffi_kt_ffi_fn_method_ktnode_cycle_patterns(`ptr`: Long,`listId`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+    ): RustBuffer.ByValue
+    external fun uniffi_kt_ffi_fn_method_ktnode_cycle_set_bc_taken(`ptr`: Long,`listId`: RustBuffer.ByValue,`date`: RustBuffer.ByValue,`taken`: Byte,uniffi_out_err: UniffiRustCallStatus, 
+    ): Unit
+    external fun uniffi_kt_ffi_fn_method_ktnode_cycle_set_flow(`ptr`: Long,`listId`: RustBuffer.ByValue,`date`: RustBuffer.ByValue,`flow`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    ): Unit
+    external fun uniffi_kt_ffi_fn_method_ktnode_cycle_set_note(`ptr`: Long,`listId`: RustBuffer.ByValue,`date`: RustBuffer.ByValue,`note`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+    ): Unit
+    external fun uniffi_kt_ffi_fn_method_ktnode_cycle_set_setting(`ptr`: Long,`listId`: RustBuffer.ByValue,`key`: RustBuffer.ByValue,`value`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+    ): Unit
+    external fun uniffi_kt_ffi_fn_method_ktnode_cycle_set_tag(`ptr`: Long,`listId`: RustBuffer.ByValue,`date`: RustBuffer.ByValue,`tag`: RustBuffer.ByValue,`on`: Byte,uniffi_out_err: UniffiRustCallStatus, 
+    ): Unit
+    external fun uniffi_kt_ffi_fn_method_ktnode_cycle_set_temp(`ptr`: Long,`listId`: RustBuffer.ByValue,`date`: RustBuffer.ByValue,`temp`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    ): Unit
+    external fun uniffi_kt_ffi_fn_method_ktnode_cycle_set_weight(`ptr`: Long,`listId`: RustBuffer.ByValue,`date`: RustBuffer.ByValue,`grams`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    ): Unit
+    external fun uniffi_kt_ffi_fn_method_ktnode_cycle_settings(`ptr`: Long,`listId`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+    ): RustBuffer.ByValue
+    external fun uniffi_kt_ffi_fn_method_ktnode_export_csv(`ptr`: Long,`listId`: RustBuffer.ByValue,`labels`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+    ): RustBuffer.ByValue
+    external fun uniffi_kt_ffi_fn_method_ktnode_partner_init(`ptr`: Long,`listId`: RustBuffer.ByValue,`journalId`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+    ): Unit
+    external fun uniffi_kt_ffi_fn_method_ktnode_partner_is_view(`ptr`: Long,`listId`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+    ): Byte
+    external fun uniffi_kt_ffi_fn_method_ktnode_partner_lists(`ptr`: Long,`journalId`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+    ): RustBuffer.ByValue
+    external fun uniffi_kt_ffi_fn_method_ktnode_partner_publish(`ptr`: Long,`journalId`: RustBuffer.ByValue,`today`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+    ): Unit
+    external fun uniffi_kt_ffi_fn_method_ktnode_partner_set_shares(`ptr`: Long,`journalId`: RustBuffer.ByValue,`items`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+    ): Unit
+    external fun uniffi_kt_ffi_fn_method_ktnode_partner_shares(`ptr`: Long,`journalId`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+    ): RustBuffer.ByValue
+    external fun uniffi_kt_ffi_fn_method_ktnode_partner_view(`ptr`: Long,`listId`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
     ): RustBuffer.ByValue
     external fun uniffi_kt_ffi_fn_clone_keyvault(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
     ): Long
@@ -1429,6 +1545,9 @@ private fun uniffiCheckApiChecksums(lib: IntegrityCheckingUniffiLib) {
     if ((lib.uniffi_kt_ffi_checksum_method_ktnode_diagnostics() and 0xFFFF) != 44672) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
+    if ((lib.uniffi_kt_ffi_checksum_method_ktnode_dismiss_join() and 0xFFFF) != 10741) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
     if ((lib.uniffi_kt_ffi_checksum_method_ktnode_display_name() and 0xFFFF) != 16726) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
@@ -1442,6 +1561,9 @@ private fun uniffiCheckApiChecksums(lib: IntegrityCheckingUniffiLib) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
     if ((lib.uniffi_kt_ffi_checksum_method_ktnode_flush() and 0xFFFF) != 60194) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if ((lib.uniffi_kt_ffi_checksum_method_ktnode_group_sync() and 0xFFFF) != 36910) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
     if ((lib.uniffi_kt_ffi_checksum_method_ktnode_groups() and 0xFFFF) != 61646) {
@@ -1510,6 +1632,9 @@ private fun uniffiCheckApiChecksums(lib: IntegrityCheckingUniffiLib) {
     if ((lib.uniffi_kt_ffi_checksum_method_ktnode_people() and 0xFFFF) != 15932) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
+    if ((lib.uniffi_kt_ffi_checksum_method_ktnode_recent_joins() and 0xFFFF) != 4980) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
     if ((lib.uniffi_kt_ffi_checksum_method_ktnode_recent_links() and 0xFFFF) != 22864) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
@@ -1517,6 +1642,9 @@ private fun uniffiCheckApiChecksums(lib: IntegrityCheckingUniffiLib) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
     if ((lib.uniffi_kt_ffi_checksum_method_ktnode_remove_image() and 0xFFFF) != 8286) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if ((lib.uniffi_kt_ffi_checksum_method_ktnode_remove_joined() and 0xFFFF) != 49461) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
     if ((lib.uniffi_kt_ffi_checksum_method_ktnode_remove_replaced_device() and 0xFFFF) != 49607) {
@@ -1618,7 +1746,7 @@ private fun uniffiCheckApiChecksums(lib: IntegrityCheckingUniffiLib) {
     if ((lib.uniffi_kt_ffi_checksum_method_ktnode_unlink_device() and 0xFFFF) != 3021) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
-    if ((lib.uniffi_kt_ffi_checksum_method_ktnode_upcoming_reminders() and 0xFFFF) != 16505) {
+    if ((lib.uniffi_kt_ffi_checksum_method_ktnode_upcoming_reminders() and 0xFFFF) != 16775) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
     if ((lib.uniffi_kt_ffi_checksum_method_ktnode_waiting_backup() and 0xFFFF) != 47409) {
@@ -1631,6 +1759,9 @@ private fun uniffiCheckApiChecksums(lib: IntegrityCheckingUniffiLib) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
     if ((lib.uniffi_kt_ffi_checksum_method_ktnode_budget_activity() and 0xFFFF) != 14244) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if ((lib.uniffi_kt_ffi_checksum_method_ktnode_budget_export_csv() and 0xFFFF) != 89) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
     if ((lib.uniffi_kt_ffi_checksum_method_ktnode_budget_unreadable() and 0xFFFF) != 29562) {
@@ -1649,9 +1780,6 @@ private fun uniffiCheckApiChecksums(lib: IntegrityCheckingUniffiLib) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
     if ((lib.uniffi_kt_ffi_checksum_method_ktnode_delete_tx() and 0xFFFF) != 61966) {
-        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
-    }
-    if ((lib.uniffi_kt_ffi_checksum_method_ktnode_export_csv() and 0xFFFF) != 54512) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
     if ((lib.uniffi_kt_ffi_checksum_method_ktnode_fill_plan() and 0xFFFF) != 51588) {
@@ -1694,6 +1822,81 @@ private fun uniffiCheckApiChecksums(lib: IntegrityCheckingUniffiLib) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
     if ((lib.uniffi_kt_ffi_checksum_method_ktnode_spending() and 0xFFFF) != 5648) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if ((lib.uniffi_kt_ffi_checksum_method_ktnode_cycle_add_custom_tag() and 0xFFFF) != 37955) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if ((lib.uniffi_kt_ffi_checksum_method_ktnode_cycle_calendar() and 0xFFFF) != 35510) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if ((lib.uniffi_kt_ffi_checksum_method_ktnode_cycle_custom_tags() and 0xFFFF) != 45622) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if ((lib.uniffi_kt_ffi_checksum_method_ktnode_cycle_day() and 0xFFFF) != 24813) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if ((lib.uniffi_kt_ffi_checksum_method_ktnode_cycle_days() and 0xFFFF) != 28978) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if ((lib.uniffi_kt_ffi_checksum_method_ktnode_cycle_delete_custom_tag() and 0xFFFF) != 59744) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if ((lib.uniffi_kt_ffi_checksum_method_ktnode_cycle_log_period() and 0xFFFF) != 5531) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if ((lib.uniffi_kt_ffi_checksum_method_ktnode_cycle_outlook() and 0xFFFF) != 61287) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if ((lib.uniffi_kt_ffi_checksum_method_ktnode_cycle_patterns() and 0xFFFF) != 28412) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if ((lib.uniffi_kt_ffi_checksum_method_ktnode_cycle_set_bc_taken() and 0xFFFF) != 53469) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if ((lib.uniffi_kt_ffi_checksum_method_ktnode_cycle_set_flow() and 0xFFFF) != 46186) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if ((lib.uniffi_kt_ffi_checksum_method_ktnode_cycle_set_note() and 0xFFFF) != 30691) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if ((lib.uniffi_kt_ffi_checksum_method_ktnode_cycle_set_setting() and 0xFFFF) != 51012) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if ((lib.uniffi_kt_ffi_checksum_method_ktnode_cycle_set_tag() and 0xFFFF) != 46596) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if ((lib.uniffi_kt_ffi_checksum_method_ktnode_cycle_set_temp() and 0xFFFF) != 27349) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if ((lib.uniffi_kt_ffi_checksum_method_ktnode_cycle_set_weight() and 0xFFFF) != 36917) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if ((lib.uniffi_kt_ffi_checksum_method_ktnode_cycle_settings() and 0xFFFF) != 19663) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if ((lib.uniffi_kt_ffi_checksum_method_ktnode_export_csv() and 0xFFFF) != 39251) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if ((lib.uniffi_kt_ffi_checksum_method_ktnode_partner_init() and 0xFFFF) != 23094) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if ((lib.uniffi_kt_ffi_checksum_method_ktnode_partner_is_view() and 0xFFFF) != 62575) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if ((lib.uniffi_kt_ffi_checksum_method_ktnode_partner_lists() and 0xFFFF) != 54984) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if ((lib.uniffi_kt_ffi_checksum_method_ktnode_partner_publish() and 0xFFFF) != 54620) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if ((lib.uniffi_kt_ffi_checksum_method_ktnode_partner_set_shares() and 0xFFFF) != 30815) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if ((lib.uniffi_kt_ffi_checksum_method_ktnode_partner_shares() and 0xFFFF) != 47714) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if ((lib.uniffi_kt_ffi_checksum_method_ktnode_partner_view() and 0xFFFF) != 25845) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
     if ((lib.uniffi_kt_ffi_checksum_method_keyvault_seal() and 0xFFFF) != 1760) {
@@ -2979,6 +3182,8 @@ public interface KtNodeInterface {
      */
     fun `diagnostics`(): Diagnostics
     
+    fun `dismissJoin`(`groupId`: kotlin.String, `deviceId`: kotlin.String)
+    
     fun `displayName`(): kotlin.String
     
     /**
@@ -3003,6 +3208,12 @@ public interface KtNodeInterface {
      * [`KtNode::sync_now`] it reads nothing and does no upkeep, so it's quick.
      */
     fun `flush`(`timeoutMs`: kotlin.ULong): kotlin.UInt
+    
+    /**
+     * How a shared group stands (cold UX review U-T4): whether this device's newest changes are still only
+     * here, and when another member last wrote.
+     */
+    fun `groupSync`(`groupId`: kotlin.String): GroupSync
     
     fun `groups`(): List<GroupItem>
     
@@ -3118,6 +3329,11 @@ public interface KtNodeInterface {
     fun `people`(`listId`: kotlin.String): List<PersonItem>
     
     /**
+     * Devices let into our shared lists recently (second-pass audit T2-13): shown with Remove and OK.
+     */
+    fun `recentJoins`(): List<RecentJoinItem>
+    
+    /**
      * Devices linked in the last day ("New device linked · Undo" on every device).
      */
     fun `recentLinks`(): List<RecentLinkItem>
@@ -3128,6 +3344,11 @@ public interface KtNodeInterface {
     fun `relayStats`(): List<RelayStat>
     
     fun `removeImage`(`listId`: kotlin.String, `taskId`: kotlin.String, `imageId`: kotlin.String)
+    
+    /**
+     * Remove a device that joined (it leaves that list; keys rotate).
+     */
+    fun `removeJoined`(`groupId`: kotlin.String, `deviceId`: kotlin.String)
     
     /**
      * Remove the previous device from those groups (their keys rotate).
@@ -3287,7 +3508,8 @@ public interface KtNodeInterface {
     fun `unlinkDevice`(`deviceId`: kotlin.String)
     
     /**
-     * Reminders of open tasks from an hour ago on, across all lists, soonest first.
+     * Reminders of open tasks from an hour ago on, across all lists, soonest first: at most
+     * [`REMINDERS_PER_LIST`] from one list and [`REMINDERS_MAX`] in all (the soonest ones).
      */
     fun `upcomingReminders`(): List<ReminderItem>
     
@@ -3305,6 +3527,12 @@ public interface KtNodeInterface {
     fun `budget`(`listId`: kotlin.String, `today`: kotlin.String): BudgetView
     
     fun `budgetActivity`(`listId`: kotlin.String): List<TxItem>
+    
+    /**
+     * The activity as CSV (date, kind, payee, envelope, account, amount, note, by, status): one line per
+     * envelope part, so a split shows as several lines.
+     */
+    fun `budgetExportCsv`(`listId`: kotlin.String): kotlin.String
     
     /**
      * How many entries of a budget could not be read (another app wrote values this one refuses; round 5, S4).
@@ -3327,12 +3555,6 @@ public interface KtNodeInterface {
     fun `deleteRepeatingAndEntries`(`listId`: kotlin.String, `repeatId`: kotlin.String): List<TxItem>
     
     fun `deleteTx`(`listId`: kotlin.String, `txId`: kotlin.String)
-    
-    /**
-     * The activity as CSV (date, kind, payee, envelope, account, amount, note, by, status): one line per
-     * envelope part, so a split shows as several lines.
-     */
-    fun `exportCsv`(`listId`: kotlin.String): kotlin.String
     
     /**
      * The parts of "fill every envelope": rule "add" (each one's monthly share) or "top" (up to it).
@@ -3391,6 +3613,73 @@ public interface KtNodeInterface {
      * Spending per envelope between two dates (both included), biggest first.
      */
     fun `spending`(`listId`: kotlin.String, `from`: kotlin.String, `to`: kotlin.String): List<SpendItem>
+    
+    fun `cycleAddCustomTag`(`listId`: kotlin.String, `name`: kotlin.String, `cat`: kotlin.String): kotlin.String
+    
+    fun `cycleCalendar`(`listId`: kotlin.String, `today`: kotlin.String, `from`: kotlin.String, `to`: kotlin.String): List<CalItem>
+    
+    fun `cycleCustomTags`(`listId`: kotlin.String): List<CustomTagItem>
+    
+    fun `cycleDay`(`listId`: kotlin.String, `date`: kotlin.String): CycleDay
+    
+    fun `cycleDays`(`listId`: kotlin.String): List<CycleDay>
+    
+    fun `cycleDeleteCustomTag`(`listId`: kotlin.String, `tagId`: kotlin.String)
+    
+    fun `cycleLogPeriod`(`listId`: kotlin.String, `start`: kotlin.String, `days`: kotlin.Long)
+    
+    fun `cycleOutlook`(`listId`: kotlin.String, `today`: kotlin.String): OutlookView
+    
+    fun `cyclePatterns`(`listId`: kotlin.String): List<PatternItem>
+    
+    fun `cycleSetBcTaken`(`listId`: kotlin.String, `date`: kotlin.String, `taken`: kotlin.Boolean)
+    
+    fun `cycleSetFlow`(`listId`: kotlin.String, `date`: kotlin.String, `flow`: kotlin.Long)
+    
+    fun `cycleSetNote`(`listId`: kotlin.String, `date`: kotlin.String, `note`: kotlin.String)
+    
+    fun `cycleSetSetting`(`listId`: kotlin.String, `key`: kotlin.String, `value`: kotlin.String)
+    
+    fun `cycleSetTag`(`listId`: kotlin.String, `date`: kotlin.String, `tag`: kotlin.String, `on`: kotlin.Boolean)
+    
+    fun `cycleSetTemp`(`listId`: kotlin.String, `date`: kotlin.String, `temp`: kotlin.Long)
+    
+    fun `cycleSetWeight`(`listId`: kotlin.String, `date`: kotlin.String, `grams`: kotlin.Long)
+    
+    fun `cycleSettings`(`listId`: kotlin.String): CycleSettings
+    
+    /**
+     * Every logged day as CSV (one row a day; tags by their names: `labels` holds the app's words for the built-in
+     * ones, custom tags by the name she gave them, else the id). No cell can start a formula.
+     */
+    fun `exportCsv`(`listId`: kotlin.String, `labels`: Map<kotlin.String, kotlin.String>): kotlin.String
+    
+    /**
+     * Make `list_id` (a new, empty list) the partner summary of the journal `journal_id`.
+     */
+    fun `partnerInit`(`listId`: kotlin.String, `journalId`: kotlin.String)
+    
+    /**
+     * Whether a list is a partner's summary (not a journal).
+     */
+    fun `partnerIsView`(`listId`: kotlin.String): kotlin.Boolean
+    
+    /**
+     * The summaries this journal writes (its partners' lists).
+     */
+    fun `partnerLists`(`journalId`: kotlin.String): List<ListItem>
+    
+    /**
+     * Bring every partner summary of this journal up to date (writes only what changed). `today` "" = the
+     * device's own date in UTC.
+     */
+    fun `partnerPublish`(`journalId`: kotlin.String, `today`: kotlin.String)
+    
+    fun `partnerSetShares`(`journalId`: kotlin.String, `items`: List<kotlin.String>)
+    
+    fun `partnerShares`(`journalId`: kotlin.String): List<kotlin.String>
+    
+    fun `partnerView`(`listId`: kotlin.String): PartnerSummary
     
     companion object
 }
@@ -3694,6 +3983,21 @@ open class KtNode: Disposable, AutoCloseable, KtNodeInterface
     }
     
 
+    
+    @Throws(KtException::class)override fun `dismissJoin`(`groupId`: kotlin.String, `deviceId`: kotlin.String)
+        = 
+    callWithHandle {
+    uniffiRustCallWithError(KtException) { _status ->
+    UniffiLib.uniffi_kt_ffi_fn_method_ktnode_dismiss_join(
+        it,
+        
+        FfiConverterString.lower(`groupId`),
+        FfiConverterString.lower(`deviceId`),_status)
+}
+    }
+    
+    
+
     override fun `displayName`(): kotlin.String {
             return FfiConverterString.lift(
     callWithHandle {
@@ -3773,6 +4077,25 @@ open class KtNode: Disposable, AutoCloseable, KtNodeInterface
         it,
         
         FfiConverterULong.lower(`timeoutMs`),_status)
+}
+    }
+    )
+    }
+    
+
+    
+    /**
+     * How a shared group stands (cold UX review U-T4): whether this device's newest changes are still only
+     * here, and when another member last wrote.
+     */
+    @Throws(KtException::class)override fun `groupSync`(`groupId`: kotlin.String): GroupSync {
+            return FfiConverterTypeGroupSync.lift(
+    callWithHandle {
+    uniffiRustCallWithError(KtException) { _status ->
+    UniffiLib.uniffi_kt_ffi_fn_method_ktnode_group_sync(
+        it,
+        
+        FfiConverterString.lower(`groupId`),_status)
 }
     }
     )
@@ -4159,6 +4482,22 @@ open class KtNode: Disposable, AutoCloseable, KtNodeInterface
 
     
     /**
+     * Devices let into our shared lists recently (second-pass audit T2-13): shown with Remove and OK.
+     */override fun `recentJoins`(): List<RecentJoinItem> {
+            return FfiConverterSequenceTypeRecentJoinItem.lift(
+    callWithHandle {
+    uniffiRustCall() { _status ->
+    UniffiLib.uniffi_kt_ffi_fn_method_ktnode_recent_joins(
+        it,
+        _status)
+}
+    }
+    )
+    }
+    
+
+    
+    /**
      * Devices linked in the last day ("New device linked · Undo" on every device).
      */override fun `recentLinks`(): List<RecentLinkItem> {
             return FfiConverterSequenceTypeRecentLinkItem.lift(
@@ -4200,6 +4539,24 @@ open class KtNode: Disposable, AutoCloseable, KtNodeInterface
         FfiConverterString.lower(`listId`),
         FfiConverterString.lower(`taskId`),
         FfiConverterString.lower(`imageId`),_status)
+}
+    }
+    
+    
+
+    
+    /**
+     * Remove a device that joined (it leaves that list; keys rotate).
+     */
+    @Throws(KtException::class)override fun `removeJoined`(`groupId`: kotlin.String, `deviceId`: kotlin.String)
+        = 
+    callWithHandle {
+    uniffiRustCallWithError(KtException) { _status ->
+    UniffiLib.uniffi_kt_ffi_fn_method_ktnode_remove_joined(
+        it,
+        
+        FfiConverterString.lower(`groupId`),
+        FfiConverterString.lower(`deviceId`),_status)
 }
     }
     
@@ -4783,7 +5140,8 @@ open class KtNode: Disposable, AutoCloseable, KtNodeInterface
 
     
     /**
-     * Reminders of open tasks from an hour ago on, across all lists, soonest first.
+     * Reminders of open tasks from an hour ago on, across all lists, soonest first: at most
+     * [`REMINDERS_PER_LIST`] from one list and [`REMINDERS_MAX`] in all (the soonest ones).
      */override fun `upcomingReminders`(): List<ReminderItem> {
             return FfiConverterSequenceTypeReminderItem.lift(
     callWithHandle {
@@ -4853,6 +5211,25 @@ open class KtNode: Disposable, AutoCloseable, KtNodeInterface
     callWithHandle {
     uniffiRustCallWithError(KtException) { _status ->
     UniffiLib.uniffi_kt_ffi_fn_method_ktnode_budget_activity(
+        it,
+        
+        FfiConverterString.lower(`listId`),_status)
+}
+    }
+    )
+    }
+    
+
+    
+    /**
+     * The activity as CSV (date, kind, payee, envelope, account, amount, note, by, status): one line per
+     * envelope part, so a split shows as several lines.
+     */
+    @Throws(KtException::class)override fun `budgetExportCsv`(`listId`: kotlin.String): kotlin.String {
+            return FfiConverterString.lift(
+    callWithHandle {
+    uniffiRustCallWithError(KtException) { _status ->
+    UniffiLib.uniffi_kt_ffi_fn_method_ktnode_budget_export_csv(
         it,
         
         FfiConverterString.lower(`listId`),_status)
@@ -4964,25 +5341,6 @@ open class KtNode: Disposable, AutoCloseable, KtNodeInterface
 }
     }
     
-    
-
-    
-    /**
-     * The activity as CSV (date, kind, payee, envelope, account, amount, note, by, status): one line per
-     * envelope part, so a split shows as several lines.
-     */
-    @Throws(KtException::class)override fun `exportCsv`(`listId`: kotlin.String): kotlin.String {
-            return FfiConverterString.lift(
-    callWithHandle {
-    uniffiRustCallWithError(KtException) { _status ->
-    UniffiLib.uniffi_kt_ffi_fn_method_ktnode_export_csv(
-        it,
-        
-        FfiConverterString.lower(`listId`),_status)
-}
-    }
-    )
-    }
     
 
     
@@ -5251,6 +5609,414 @@ open class KtNode: Disposable, AutoCloseable, KtNodeInterface
     
 
     
+    @Throws(KtException::class)override fun `cycleAddCustomTag`(`listId`: kotlin.String, `name`: kotlin.String, `cat`: kotlin.String): kotlin.String {
+            return FfiConverterString.lift(
+    callWithHandle {
+    uniffiRustCallWithError(KtException) { _status ->
+    UniffiLib.uniffi_kt_ffi_fn_method_ktnode_cycle_add_custom_tag(
+        it,
+        
+        FfiConverterString.lower(`listId`),
+        FfiConverterString.lower(`name`),
+        FfiConverterString.lower(`cat`),_status)
+}
+    }
+    )
+    }
+    
+
+    
+    @Throws(KtException::class)override fun `cycleCalendar`(`listId`: kotlin.String, `today`: kotlin.String, `from`: kotlin.String, `to`: kotlin.String): List<CalItem> {
+            return FfiConverterSequenceTypeCalItem.lift(
+    callWithHandle {
+    uniffiRustCallWithError(KtException) { _status ->
+    UniffiLib.uniffi_kt_ffi_fn_method_ktnode_cycle_calendar(
+        it,
+        
+        FfiConverterString.lower(`listId`),
+        FfiConverterString.lower(`today`),
+        FfiConverterString.lower(`from`),
+        FfiConverterString.lower(`to`),_status)
+}
+    }
+    )
+    }
+    
+
+    
+    @Throws(KtException::class)override fun `cycleCustomTags`(`listId`: kotlin.String): List<CustomTagItem> {
+            return FfiConverterSequenceTypeCustomTagItem.lift(
+    callWithHandle {
+    uniffiRustCallWithError(KtException) { _status ->
+    UniffiLib.uniffi_kt_ffi_fn_method_ktnode_cycle_custom_tags(
+        it,
+        
+        FfiConverterString.lower(`listId`),_status)
+}
+    }
+    )
+    }
+    
+
+    
+    @Throws(KtException::class)override fun `cycleDay`(`listId`: kotlin.String, `date`: kotlin.String): CycleDay {
+            return FfiConverterTypeCycleDay.lift(
+    callWithHandle {
+    uniffiRustCallWithError(KtException) { _status ->
+    UniffiLib.uniffi_kt_ffi_fn_method_ktnode_cycle_day(
+        it,
+        
+        FfiConverterString.lower(`listId`),
+        FfiConverterString.lower(`date`),_status)
+}
+    }
+    )
+    }
+    
+
+    
+    @Throws(KtException::class)override fun `cycleDays`(`listId`: kotlin.String): List<CycleDay> {
+            return FfiConverterSequenceTypeCycleDay.lift(
+    callWithHandle {
+    uniffiRustCallWithError(KtException) { _status ->
+    UniffiLib.uniffi_kt_ffi_fn_method_ktnode_cycle_days(
+        it,
+        
+        FfiConverterString.lower(`listId`),_status)
+}
+    }
+    )
+    }
+    
+
+    
+    @Throws(KtException::class)override fun `cycleDeleteCustomTag`(`listId`: kotlin.String, `tagId`: kotlin.String)
+        = 
+    callWithHandle {
+    uniffiRustCallWithError(KtException) { _status ->
+    UniffiLib.uniffi_kt_ffi_fn_method_ktnode_cycle_delete_custom_tag(
+        it,
+        
+        FfiConverterString.lower(`listId`),
+        FfiConverterString.lower(`tagId`),_status)
+}
+    }
+    
+    
+
+    
+    @Throws(KtException::class)override fun `cycleLogPeriod`(`listId`: kotlin.String, `start`: kotlin.String, `days`: kotlin.Long)
+        = 
+    callWithHandle {
+    uniffiRustCallWithError(KtException) { _status ->
+    UniffiLib.uniffi_kt_ffi_fn_method_ktnode_cycle_log_period(
+        it,
+        
+        FfiConverterString.lower(`listId`),
+        FfiConverterString.lower(`start`),
+        FfiConverterLong.lower(`days`),_status)
+}
+    }
+    
+    
+
+    
+    @Throws(KtException::class)override fun `cycleOutlook`(`listId`: kotlin.String, `today`: kotlin.String): OutlookView {
+            return FfiConverterTypeOutlookView.lift(
+    callWithHandle {
+    uniffiRustCallWithError(KtException) { _status ->
+    UniffiLib.uniffi_kt_ffi_fn_method_ktnode_cycle_outlook(
+        it,
+        
+        FfiConverterString.lower(`listId`),
+        FfiConverterString.lower(`today`),_status)
+}
+    }
+    )
+    }
+    
+
+    
+    @Throws(KtException::class)override fun `cyclePatterns`(`listId`: kotlin.String): List<PatternItem> {
+            return FfiConverterSequenceTypePatternItem.lift(
+    callWithHandle {
+    uniffiRustCallWithError(KtException) { _status ->
+    UniffiLib.uniffi_kt_ffi_fn_method_ktnode_cycle_patterns(
+        it,
+        
+        FfiConverterString.lower(`listId`),_status)
+}
+    }
+    )
+    }
+    
+
+    
+    @Throws(KtException::class)override fun `cycleSetBcTaken`(`listId`: kotlin.String, `date`: kotlin.String, `taken`: kotlin.Boolean)
+        = 
+    callWithHandle {
+    uniffiRustCallWithError(KtException) { _status ->
+    UniffiLib.uniffi_kt_ffi_fn_method_ktnode_cycle_set_bc_taken(
+        it,
+        
+        FfiConverterString.lower(`listId`),
+        FfiConverterString.lower(`date`),
+        FfiConverterBoolean.lower(`taken`),_status)
+}
+    }
+    
+    
+
+    
+    @Throws(KtException::class)override fun `cycleSetFlow`(`listId`: kotlin.String, `date`: kotlin.String, `flow`: kotlin.Long)
+        = 
+    callWithHandle {
+    uniffiRustCallWithError(KtException) { _status ->
+    UniffiLib.uniffi_kt_ffi_fn_method_ktnode_cycle_set_flow(
+        it,
+        
+        FfiConverterString.lower(`listId`),
+        FfiConverterString.lower(`date`),
+        FfiConverterLong.lower(`flow`),_status)
+}
+    }
+    
+    
+
+    
+    @Throws(KtException::class)override fun `cycleSetNote`(`listId`: kotlin.String, `date`: kotlin.String, `note`: kotlin.String)
+        = 
+    callWithHandle {
+    uniffiRustCallWithError(KtException) { _status ->
+    UniffiLib.uniffi_kt_ffi_fn_method_ktnode_cycle_set_note(
+        it,
+        
+        FfiConverterString.lower(`listId`),
+        FfiConverterString.lower(`date`),
+        FfiConverterString.lower(`note`),_status)
+}
+    }
+    
+    
+
+    
+    @Throws(KtException::class)override fun `cycleSetSetting`(`listId`: kotlin.String, `key`: kotlin.String, `value`: kotlin.String)
+        = 
+    callWithHandle {
+    uniffiRustCallWithError(KtException) { _status ->
+    UniffiLib.uniffi_kt_ffi_fn_method_ktnode_cycle_set_setting(
+        it,
+        
+        FfiConverterString.lower(`listId`),
+        FfiConverterString.lower(`key`),
+        FfiConverterString.lower(`value`),_status)
+}
+    }
+    
+    
+
+    
+    @Throws(KtException::class)override fun `cycleSetTag`(`listId`: kotlin.String, `date`: kotlin.String, `tag`: kotlin.String, `on`: kotlin.Boolean)
+        = 
+    callWithHandle {
+    uniffiRustCallWithError(KtException) { _status ->
+    UniffiLib.uniffi_kt_ffi_fn_method_ktnode_cycle_set_tag(
+        it,
+        
+        FfiConverterString.lower(`listId`),
+        FfiConverterString.lower(`date`),
+        FfiConverterString.lower(`tag`),
+        FfiConverterBoolean.lower(`on`),_status)
+}
+    }
+    
+    
+
+    
+    @Throws(KtException::class)override fun `cycleSetTemp`(`listId`: kotlin.String, `date`: kotlin.String, `temp`: kotlin.Long)
+        = 
+    callWithHandle {
+    uniffiRustCallWithError(KtException) { _status ->
+    UniffiLib.uniffi_kt_ffi_fn_method_ktnode_cycle_set_temp(
+        it,
+        
+        FfiConverterString.lower(`listId`),
+        FfiConverterString.lower(`date`),
+        FfiConverterLong.lower(`temp`),_status)
+}
+    }
+    
+    
+
+    
+    @Throws(KtException::class)override fun `cycleSetWeight`(`listId`: kotlin.String, `date`: kotlin.String, `grams`: kotlin.Long)
+        = 
+    callWithHandle {
+    uniffiRustCallWithError(KtException) { _status ->
+    UniffiLib.uniffi_kt_ffi_fn_method_ktnode_cycle_set_weight(
+        it,
+        
+        FfiConverterString.lower(`listId`),
+        FfiConverterString.lower(`date`),
+        FfiConverterLong.lower(`grams`),_status)
+}
+    }
+    
+    
+
+    
+    @Throws(KtException::class)override fun `cycleSettings`(`listId`: kotlin.String): CycleSettings {
+            return FfiConverterTypeCycleSettings.lift(
+    callWithHandle {
+    uniffiRustCallWithError(KtException) { _status ->
+    UniffiLib.uniffi_kt_ffi_fn_method_ktnode_cycle_settings(
+        it,
+        
+        FfiConverterString.lower(`listId`),_status)
+}
+    }
+    )
+    }
+    
+
+    
+    /**
+     * Every logged day as CSV (one row a day; tags by their names: `labels` holds the app's words for the built-in
+     * ones, custom tags by the name she gave them, else the id). No cell can start a formula.
+     */
+    @Throws(KtException::class)override fun `exportCsv`(`listId`: kotlin.String, `labels`: Map<kotlin.String, kotlin.String>): kotlin.String {
+            return FfiConverterString.lift(
+    callWithHandle {
+    uniffiRustCallWithError(KtException) { _status ->
+    UniffiLib.uniffi_kt_ffi_fn_method_ktnode_export_csv(
+        it,
+        
+        FfiConverterString.lower(`listId`),
+        FfiConverterMapStringString.lower(`labels`),_status)
+}
+    }
+    )
+    }
+    
+
+    
+    /**
+     * Make `list_id` (a new, empty list) the partner summary of the journal `journal_id`.
+     */
+    @Throws(KtException::class)override fun `partnerInit`(`listId`: kotlin.String, `journalId`: kotlin.String)
+        = 
+    callWithHandle {
+    uniffiRustCallWithError(KtException) { _status ->
+    UniffiLib.uniffi_kt_ffi_fn_method_ktnode_partner_init(
+        it,
+        
+        FfiConverterString.lower(`listId`),
+        FfiConverterString.lower(`journalId`),_status)
+}
+    }
+    
+    
+
+    
+    /**
+     * Whether a list is a partner's summary (not a journal).
+     */
+    @Throws(KtException::class)override fun `partnerIsView`(`listId`: kotlin.String): kotlin.Boolean {
+            return FfiConverterBoolean.lift(
+    callWithHandle {
+    uniffiRustCallWithError(KtException) { _status ->
+    UniffiLib.uniffi_kt_ffi_fn_method_ktnode_partner_is_view(
+        it,
+        
+        FfiConverterString.lower(`listId`),_status)
+}
+    }
+    )
+    }
+    
+
+    
+    /**
+     * The summaries this journal writes (its partners' lists).
+     */override fun `partnerLists`(`journalId`: kotlin.String): List<ListItem> {
+            return FfiConverterSequenceTypeListItem.lift(
+    callWithHandle {
+    uniffiRustCall() { _status ->
+    UniffiLib.uniffi_kt_ffi_fn_method_ktnode_partner_lists(
+        it,
+        
+        FfiConverterString.lower(`journalId`),_status)
+}
+    }
+    )
+    }
+    
+
+    
+    /**
+     * Bring every partner summary of this journal up to date (writes only what changed). `today` "" = the
+     * device's own date in UTC.
+     */
+    @Throws(KtException::class)override fun `partnerPublish`(`journalId`: kotlin.String, `today`: kotlin.String)
+        = 
+    callWithHandle {
+    uniffiRustCallWithError(KtException) { _status ->
+    UniffiLib.uniffi_kt_ffi_fn_method_ktnode_partner_publish(
+        it,
+        
+        FfiConverterString.lower(`journalId`),
+        FfiConverterString.lower(`today`),_status)
+}
+    }
+    
+    
+
+    
+    @Throws(KtException::class)override fun `partnerSetShares`(`journalId`: kotlin.String, `items`: List<kotlin.String>)
+        = 
+    callWithHandle {
+    uniffiRustCallWithError(KtException) { _status ->
+    UniffiLib.uniffi_kt_ffi_fn_method_ktnode_partner_set_shares(
+        it,
+        
+        FfiConverterString.lower(`journalId`),
+        FfiConverterSequenceString.lower(`items`),_status)
+}
+    }
+    
+    
+
+    
+    @Throws(KtException::class)override fun `partnerShares`(`journalId`: kotlin.String): List<kotlin.String> {
+            return FfiConverterSequenceString.lift(
+    callWithHandle {
+    uniffiRustCallWithError(KtException) { _status ->
+    UniffiLib.uniffi_kt_ffi_fn_method_ktnode_partner_shares(
+        it,
+        
+        FfiConverterString.lower(`journalId`),_status)
+}
+    }
+    )
+    }
+    
+
+    
+    @Throws(KtException::class)override fun `partnerView`(`listId`: kotlin.String): PartnerSummary {
+            return FfiConverterTypePartnerSummary.lift(
+    callWithHandle {
+    uniffiRustCallWithError(KtException) { _status ->
+    UniffiLib.uniffi_kt_ffi_fn_method_ktnode_partner_view(
+        it,
+        
+        FfiConverterString.lower(`listId`),_status)
+}
+    }
+    )
+    }
+    
+
+    
 
     
 
@@ -5462,6 +6228,74 @@ public object FfiConverterTypeBudgetView: FfiConverterRustBuffer<BudgetView> {
 
 
 
+data class CalItem (
+    var `date`: kotlin.String
+    , 
+    var `flow`: kotlin.Long
+    , 
+    var `logged`: kotlin.Boolean
+    , 
+    var `periodPredicted`: kotlin.Boolean
+    , 
+    var `fertile`: kotlin.Boolean
+    , 
+    var `ovulation`: kotlin.Boolean
+    , 
+    var `pms`: kotlin.Boolean
+    , 
+    var `cycleDay`: kotlin.Long
+    
+){
+    
+
+    
+
+    
+    companion object
+}
+
+/**
+ * @suppress
+ */
+public object FfiConverterTypeCalItem: FfiConverterRustBuffer<CalItem> {
+    override fun read(buf: ByteBuffer): CalItem {
+        return CalItem(
+            FfiConverterString.read(buf),
+            FfiConverterLong.read(buf),
+            FfiConverterBoolean.read(buf),
+            FfiConverterBoolean.read(buf),
+            FfiConverterBoolean.read(buf),
+            FfiConverterBoolean.read(buf),
+            FfiConverterBoolean.read(buf),
+            FfiConverterLong.read(buf),
+        )
+    }
+
+    override fun allocationSize(value: CalItem) = (
+            FfiConverterString.allocationSize(value.`date`) +
+            FfiConverterLong.allocationSize(value.`flow`) +
+            FfiConverterBoolean.allocationSize(value.`logged`) +
+            FfiConverterBoolean.allocationSize(value.`periodPredicted`) +
+            FfiConverterBoolean.allocationSize(value.`fertile`) +
+            FfiConverterBoolean.allocationSize(value.`ovulation`) +
+            FfiConverterBoolean.allocationSize(value.`pms`) +
+            FfiConverterLong.allocationSize(value.`cycleDay`)
+    )
+
+    override fun write(value: CalItem, buf: ByteBuffer) {
+            FfiConverterString.write(value.`date`, buf)
+            FfiConverterLong.write(value.`flow`, buf)
+            FfiConverterBoolean.write(value.`logged`, buf)
+            FfiConverterBoolean.write(value.`periodPredicted`, buf)
+            FfiConverterBoolean.write(value.`fertile`, buf)
+            FfiConverterBoolean.write(value.`ovulation`, buf)
+            FfiConverterBoolean.write(value.`pms`, buf)
+            FfiConverterLong.write(value.`cycleDay`, buf)
+    }
+}
+
+
+
 /**
  * Something another person did (for notifications; batched per list by the platform).
  */
@@ -5529,6 +6363,228 @@ public object FfiConverterTypeChangeItem: FfiConverterRustBuffer<ChangeItem> {
             FfiConverterString.write(value.`kind`, buf)
             FfiConverterString.write(value.`title`, buf)
             FfiConverterULong.write(value.`atMs`, buf)
+    }
+}
+
+
+
+data class CustomTagItem (
+    var `id`: kotlin.String
+    , 
+    var `name`: kotlin.String
+    , 
+    var `cat`: kotlin.String
+    
+){
+    
+
+    
+
+    
+    companion object
+}
+
+/**
+ * @suppress
+ */
+public object FfiConverterTypeCustomTagItem: FfiConverterRustBuffer<CustomTagItem> {
+    override fun read(buf: ByteBuffer): CustomTagItem {
+        return CustomTagItem(
+            FfiConverterString.read(buf),
+            FfiConverterString.read(buf),
+            FfiConverterString.read(buf),
+        )
+    }
+
+    override fun allocationSize(value: CustomTagItem) = (
+            FfiConverterString.allocationSize(value.`id`) +
+            FfiConverterString.allocationSize(value.`name`) +
+            FfiConverterString.allocationSize(value.`cat`)
+    )
+
+    override fun write(value: CustomTagItem, buf: ByteBuffer) {
+            FfiConverterString.write(value.`id`, buf)
+            FfiConverterString.write(value.`name`, buf)
+            FfiConverterString.write(value.`cat`, buf)
+    }
+}
+
+
+
+data class CycleDay (
+    var `date`: kotlin.String
+    , 
+    var `flow`: kotlin.Long
+    , 
+    var `tags`: List<kotlin.String>
+    , 
+    var `temp`: kotlin.Long
+    , 
+    var `weight`: kotlin.Long
+    , 
+    var `note`: kotlin.String
+    , 
+    var `bcTaken`: kotlin.Boolean
+    
+){
+    
+
+    
+
+    
+    companion object
+}
+
+/**
+ * @suppress
+ */
+public object FfiConverterTypeCycleDay: FfiConverterRustBuffer<CycleDay> {
+    override fun read(buf: ByteBuffer): CycleDay {
+        return CycleDay(
+            FfiConverterString.read(buf),
+            FfiConverterLong.read(buf),
+            FfiConverterSequenceString.read(buf),
+            FfiConverterLong.read(buf),
+            FfiConverterLong.read(buf),
+            FfiConverterString.read(buf),
+            FfiConverterBoolean.read(buf),
+        )
+    }
+
+    override fun allocationSize(value: CycleDay) = (
+            FfiConverterString.allocationSize(value.`date`) +
+            FfiConverterLong.allocationSize(value.`flow`) +
+            FfiConverterSequenceString.allocationSize(value.`tags`) +
+            FfiConverterLong.allocationSize(value.`temp`) +
+            FfiConverterLong.allocationSize(value.`weight`) +
+            FfiConverterString.allocationSize(value.`note`) +
+            FfiConverterBoolean.allocationSize(value.`bcTaken`)
+    )
+
+    override fun write(value: CycleDay, buf: ByteBuffer) {
+            FfiConverterString.write(value.`date`, buf)
+            FfiConverterLong.write(value.`flow`, buf)
+            FfiConverterSequenceString.write(value.`tags`, buf)
+            FfiConverterLong.write(value.`temp`, buf)
+            FfiConverterLong.write(value.`weight`, buf)
+            FfiConverterString.write(value.`note`, buf)
+            FfiConverterBoolean.write(value.`bcTaken`, buf)
+    }
+}
+
+
+
+data class CycleLen (
+    var `start`: kotlin.String
+    , 
+    var `days`: kotlin.Long
+    
+){
+    
+
+    
+
+    
+    companion object
+}
+
+/**
+ * @suppress
+ */
+public object FfiConverterTypeCycleLen: FfiConverterRustBuffer<CycleLen> {
+    override fun read(buf: ByteBuffer): CycleLen {
+        return CycleLen(
+            FfiConverterString.read(buf),
+            FfiConverterLong.read(buf),
+        )
+    }
+
+    override fun allocationSize(value: CycleLen) = (
+            FfiConverterString.allocationSize(value.`start`) +
+            FfiConverterLong.allocationSize(value.`days`)
+    )
+
+    override fun write(value: CycleLen, buf: ByteBuffer) {
+            FfiConverterString.write(value.`start`, buf)
+            FfiConverterLong.write(value.`days`, buf)
+    }
+}
+
+
+
+data class CycleSettings (
+    var `mode`: kotlin.String
+    , 
+    var `cycleLen`: kotlin.Long
+    , 
+    var `periodLen`: kotlin.Long
+    , 
+    var `luteal`: kotlin.Long
+    , 
+    var `lmp`: kotlin.String
+    , 
+    var `bc`: kotlin.String
+    , 
+    var `bcStart`: kotlin.String
+    , 
+    var `bcActive`: kotlin.Long
+    , 
+    var `bcBreak`: kotlin.Long
+    , 
+    var `hidden`: List<kotlin.String>
+    
+){
+    
+
+    
+
+    
+    companion object
+}
+
+/**
+ * @suppress
+ */
+public object FfiConverterTypeCycleSettings: FfiConverterRustBuffer<CycleSettings> {
+    override fun read(buf: ByteBuffer): CycleSettings {
+        return CycleSettings(
+            FfiConverterString.read(buf),
+            FfiConverterLong.read(buf),
+            FfiConverterLong.read(buf),
+            FfiConverterLong.read(buf),
+            FfiConverterString.read(buf),
+            FfiConverterString.read(buf),
+            FfiConverterString.read(buf),
+            FfiConverterLong.read(buf),
+            FfiConverterLong.read(buf),
+            FfiConverterSequenceString.read(buf),
+        )
+    }
+
+    override fun allocationSize(value: CycleSettings) = (
+            FfiConverterString.allocationSize(value.`mode`) +
+            FfiConverterLong.allocationSize(value.`cycleLen`) +
+            FfiConverterLong.allocationSize(value.`periodLen`) +
+            FfiConverterLong.allocationSize(value.`luteal`) +
+            FfiConverterString.allocationSize(value.`lmp`) +
+            FfiConverterString.allocationSize(value.`bc`) +
+            FfiConverterString.allocationSize(value.`bcStart`) +
+            FfiConverterLong.allocationSize(value.`bcActive`) +
+            FfiConverterLong.allocationSize(value.`bcBreak`) +
+            FfiConverterSequenceString.allocationSize(value.`hidden`)
+    )
+
+    override fun write(value: CycleSettings, buf: ByteBuffer) {
+            FfiConverterString.write(value.`mode`, buf)
+            FfiConverterLong.write(value.`cycleLen`, buf)
+            FfiConverterLong.write(value.`periodLen`, buf)
+            FfiConverterLong.write(value.`luteal`, buf)
+            FfiConverterString.write(value.`lmp`, buf)
+            FfiConverterString.write(value.`bc`, buf)
+            FfiConverterString.write(value.`bcStart`, buf)
+            FfiConverterLong.write(value.`bcActive`, buf)
+            FfiConverterLong.write(value.`bcBreak`, buf)
+            FfiConverterSequenceString.write(value.`hidden`, buf)
     }
 }
 
@@ -5818,6 +6874,53 @@ public object FfiConverterTypeGroupStorage: FfiConverterRustBuffer<GroupStorage>
     override fun write(value: GroupStorage, buf: ByteBuffer) {
             FfiConverterString.write(value.`name`, buf)
             FfiConverterULong.write(value.`bytes`, buf)
+    }
+}
+
+
+
+/**
+ * A shared group's sync state for the list header ([`KtNode::group_sync`]).
+ */
+data class GroupSync (
+    /**
+     * This device's newest changes reached no shared mailbox in the last round.
+     */
+    var `onlyHere`: kotlin.Boolean
+    , 
+    /**
+     * When another current member last wrote (ms), if any has.
+     */
+    var `othersLastMs`: kotlin.ULong?
+    
+){
+    
+
+    
+
+    
+    companion object
+}
+
+/**
+ * @suppress
+ */
+public object FfiConverterTypeGroupSync: FfiConverterRustBuffer<GroupSync> {
+    override fun read(buf: ByteBuffer): GroupSync {
+        return GroupSync(
+            FfiConverterBoolean.read(buf),
+            FfiConverterOptionalULong.read(buf),
+        )
+    }
+
+    override fun allocationSize(value: GroupSync) = (
+            FfiConverterBoolean.allocationSize(value.`onlyHere`) +
+            FfiConverterOptionalULong.allocationSize(value.`othersLastMs`)
+    )
+
+    override fun write(value: GroupSync, buf: ByteBuffer) {
+            FfiConverterBoolean.write(value.`onlyHere`, buf)
+            FfiConverterOptionalULong.write(value.`othersLastMs`, buf)
     }
 }
 
@@ -6326,6 +7429,143 @@ public object FfiConverterTypeNotesItem: FfiConverterRustBuffer<NotesItem> {
 
 
 
+data class OutlookView (
+    var `cycles`: List<CycleLen>
+    , 
+    var `periods`: List<PeriodItem>
+    , 
+    var `avgCycle`: kotlin.Long
+    , 
+    var `avgPeriod`: kotlin.Long
+    , 
+    var `shortest`: kotlin.Long
+    , 
+    var `longest`: kotlin.Long
+    , 
+    var `learned`: kotlin.Boolean
+    , 
+    var `irregular`: kotlin.Boolean
+    , 
+    var `lastStart`: kotlin.String
+    , 
+    var `cycleDay`: kotlin.Long
+    , 
+    var `ovulationSeen`: kotlin.String
+    , 
+    var `coverLine`: kotlin.Long
+    , 
+    var `next`: List<PredictionItem>
+    , 
+    var `lateDays`: kotlin.Long
+    , 
+    /**
+     * Pregnancy mode: week and day, and the due date (week -1 = no date set).
+     */
+    var `pregWeek`: kotlin.Long
+    , 
+    var `pregDay`: kotlin.Long
+    , 
+    var `due`: kotlin.String
+    , 
+    /**
+     * Pill: day of the pack (0 = no pack) and whether it is an active day.
+     */
+    var `pillDay`: kotlin.Long
+    , 
+    var `pillActive`: kotlin.Boolean
+    , 
+    /**
+     * Ring, patch or shot: the next change ("" = none).
+     */
+    var `nextChange`: kotlin.String
+    
+){
+    
+
+    
+
+    
+    companion object
+}
+
+/**
+ * @suppress
+ */
+public object FfiConverterTypeOutlookView: FfiConverterRustBuffer<OutlookView> {
+    override fun read(buf: ByteBuffer): OutlookView {
+        return OutlookView(
+            FfiConverterSequenceTypeCycleLen.read(buf),
+            FfiConverterSequenceTypePeriodItem.read(buf),
+            FfiConverterLong.read(buf),
+            FfiConverterLong.read(buf),
+            FfiConverterLong.read(buf),
+            FfiConverterLong.read(buf),
+            FfiConverterBoolean.read(buf),
+            FfiConverterBoolean.read(buf),
+            FfiConverterString.read(buf),
+            FfiConverterLong.read(buf),
+            FfiConverterString.read(buf),
+            FfiConverterLong.read(buf),
+            FfiConverterSequenceTypePredictionItem.read(buf),
+            FfiConverterLong.read(buf),
+            FfiConverterLong.read(buf),
+            FfiConverterLong.read(buf),
+            FfiConverterString.read(buf),
+            FfiConverterLong.read(buf),
+            FfiConverterBoolean.read(buf),
+            FfiConverterString.read(buf),
+        )
+    }
+
+    override fun allocationSize(value: OutlookView) = (
+            FfiConverterSequenceTypeCycleLen.allocationSize(value.`cycles`) +
+            FfiConverterSequenceTypePeriodItem.allocationSize(value.`periods`) +
+            FfiConverterLong.allocationSize(value.`avgCycle`) +
+            FfiConverterLong.allocationSize(value.`avgPeriod`) +
+            FfiConverterLong.allocationSize(value.`shortest`) +
+            FfiConverterLong.allocationSize(value.`longest`) +
+            FfiConverterBoolean.allocationSize(value.`learned`) +
+            FfiConverterBoolean.allocationSize(value.`irregular`) +
+            FfiConverterString.allocationSize(value.`lastStart`) +
+            FfiConverterLong.allocationSize(value.`cycleDay`) +
+            FfiConverterString.allocationSize(value.`ovulationSeen`) +
+            FfiConverterLong.allocationSize(value.`coverLine`) +
+            FfiConverterSequenceTypePredictionItem.allocationSize(value.`next`) +
+            FfiConverterLong.allocationSize(value.`lateDays`) +
+            FfiConverterLong.allocationSize(value.`pregWeek`) +
+            FfiConverterLong.allocationSize(value.`pregDay`) +
+            FfiConverterString.allocationSize(value.`due`) +
+            FfiConverterLong.allocationSize(value.`pillDay`) +
+            FfiConverterBoolean.allocationSize(value.`pillActive`) +
+            FfiConverterString.allocationSize(value.`nextChange`)
+    )
+
+    override fun write(value: OutlookView, buf: ByteBuffer) {
+            FfiConverterSequenceTypeCycleLen.write(value.`cycles`, buf)
+            FfiConverterSequenceTypePeriodItem.write(value.`periods`, buf)
+            FfiConverterLong.write(value.`avgCycle`, buf)
+            FfiConverterLong.write(value.`avgPeriod`, buf)
+            FfiConverterLong.write(value.`shortest`, buf)
+            FfiConverterLong.write(value.`longest`, buf)
+            FfiConverterBoolean.write(value.`learned`, buf)
+            FfiConverterBoolean.write(value.`irregular`, buf)
+            FfiConverterString.write(value.`lastStart`, buf)
+            FfiConverterLong.write(value.`cycleDay`, buf)
+            FfiConverterString.write(value.`ovulationSeen`, buf)
+            FfiConverterLong.write(value.`coverLine`, buf)
+            FfiConverterSequenceTypePredictionItem.write(value.`next`, buf)
+            FfiConverterLong.write(value.`lateDays`, buf)
+            FfiConverterLong.write(value.`pregWeek`, buf)
+            FfiConverterLong.write(value.`pregDay`, buf)
+            FfiConverterString.write(value.`due`, buf)
+            FfiConverterLong.write(value.`pillDay`, buf)
+            FfiConverterBoolean.write(value.`pillActive`, buf)
+            FfiConverterString.write(value.`nextChange`, buf)
+    }
+}
+
+
+
 data class PartItem (
     var `envelopeId`: kotlin.String
     , 
@@ -6367,6 +7607,168 @@ public object FfiConverterTypePartItem: FfiConverterRustBuffer<PartItem> {
             FfiConverterString.write(value.`envelopeId`, buf)
             FfiConverterString.write(value.`envelopeName`, buf)
             FfiConverterLong.write(value.`cents`, buf)
+    }
+}
+
+
+
+data class PartnerSummary (
+    var `name`: kotlin.String
+    , 
+    /**
+     * The day the summary was written.
+     */
+    var `at`: kotlin.String
+    , 
+    var `cycleDay`: kotlin.Long
+    , 
+    var `nextPeriod`: kotlin.String
+    , 
+    var `lateDays`: kotlin.Long
+    , 
+    /**
+     * The predicted start before a late period moved it, and the last day that is still usual ("" in old summaries).
+     */
+    var `expected`: kotlin.String
+    , 
+    var `lateFrom`: kotlin.String
+    , 
+    var `fertileFrom`: kotlin.String
+    , 
+    var `fertileTo`: kotlin.String
+    , 
+    var `ovulation`: kotlin.String
+    , 
+    var `feel`: List<kotlin.String>
+    , 
+    var `pregnant`: kotlin.Boolean
+    , 
+    var `pregWeek`: kotlin.Long
+    , 
+    var `due`: kotlin.String
+    
+){
+    
+
+    
+
+    
+    companion object
+}
+
+/**
+ * @suppress
+ */
+public object FfiConverterTypePartnerSummary: FfiConverterRustBuffer<PartnerSummary> {
+    override fun read(buf: ByteBuffer): PartnerSummary {
+        return PartnerSummary(
+            FfiConverterString.read(buf),
+            FfiConverterString.read(buf),
+            FfiConverterLong.read(buf),
+            FfiConverterString.read(buf),
+            FfiConverterLong.read(buf),
+            FfiConverterString.read(buf),
+            FfiConverterString.read(buf),
+            FfiConverterString.read(buf),
+            FfiConverterString.read(buf),
+            FfiConverterString.read(buf),
+            FfiConverterSequenceString.read(buf),
+            FfiConverterBoolean.read(buf),
+            FfiConverterLong.read(buf),
+            FfiConverterString.read(buf),
+        )
+    }
+
+    override fun allocationSize(value: PartnerSummary) = (
+            FfiConverterString.allocationSize(value.`name`) +
+            FfiConverterString.allocationSize(value.`at`) +
+            FfiConverterLong.allocationSize(value.`cycleDay`) +
+            FfiConverterString.allocationSize(value.`nextPeriod`) +
+            FfiConverterLong.allocationSize(value.`lateDays`) +
+            FfiConverterString.allocationSize(value.`expected`) +
+            FfiConverterString.allocationSize(value.`lateFrom`) +
+            FfiConverterString.allocationSize(value.`fertileFrom`) +
+            FfiConverterString.allocationSize(value.`fertileTo`) +
+            FfiConverterString.allocationSize(value.`ovulation`) +
+            FfiConverterSequenceString.allocationSize(value.`feel`) +
+            FfiConverterBoolean.allocationSize(value.`pregnant`) +
+            FfiConverterLong.allocationSize(value.`pregWeek`) +
+            FfiConverterString.allocationSize(value.`due`)
+    )
+
+    override fun write(value: PartnerSummary, buf: ByteBuffer) {
+            FfiConverterString.write(value.`name`, buf)
+            FfiConverterString.write(value.`at`, buf)
+            FfiConverterLong.write(value.`cycleDay`, buf)
+            FfiConverterString.write(value.`nextPeriod`, buf)
+            FfiConverterLong.write(value.`lateDays`, buf)
+            FfiConverterString.write(value.`expected`, buf)
+            FfiConverterString.write(value.`lateFrom`, buf)
+            FfiConverterString.write(value.`fertileFrom`, buf)
+            FfiConverterString.write(value.`fertileTo`, buf)
+            FfiConverterString.write(value.`ovulation`, buf)
+            FfiConverterSequenceString.write(value.`feel`, buf)
+            FfiConverterBoolean.write(value.`pregnant`, buf)
+            FfiConverterLong.write(value.`pregWeek`, buf)
+            FfiConverterString.write(value.`due`, buf)
+    }
+}
+
+
+
+data class PatternItem (
+    var `tag`: kotlin.String
+    , 
+    var `cyclesWith`: kotlin.Long
+    , 
+    var `cycles`: kotlin.Long
+    , 
+    var `fromStart`: kotlin.Boolean
+    , 
+    var `from`: kotlin.Long
+    , 
+    var `to`: kotlin.Long
+    
+){
+    
+
+    
+
+    
+    companion object
+}
+
+/**
+ * @suppress
+ */
+public object FfiConverterTypePatternItem: FfiConverterRustBuffer<PatternItem> {
+    override fun read(buf: ByteBuffer): PatternItem {
+        return PatternItem(
+            FfiConverterString.read(buf),
+            FfiConverterLong.read(buf),
+            FfiConverterLong.read(buf),
+            FfiConverterBoolean.read(buf),
+            FfiConverterLong.read(buf),
+            FfiConverterLong.read(buf),
+        )
+    }
+
+    override fun allocationSize(value: PatternItem) = (
+            FfiConverterString.allocationSize(value.`tag`) +
+            FfiConverterLong.allocationSize(value.`cyclesWith`) +
+            FfiConverterLong.allocationSize(value.`cycles`) +
+            FfiConverterBoolean.allocationSize(value.`fromStart`) +
+            FfiConverterLong.allocationSize(value.`from`) +
+            FfiConverterLong.allocationSize(value.`to`)
+    )
+
+    override fun write(value: PatternItem, buf: ByteBuffer) {
+            FfiConverterString.write(value.`tag`, buf)
+            FfiConverterLong.write(value.`cyclesWith`, buf)
+            FfiConverterLong.write(value.`cycles`, buf)
+            FfiConverterBoolean.write(value.`fromStart`, buf)
+            FfiConverterLong.write(value.`from`, buf)
+            FfiConverterLong.write(value.`to`, buf)
     }
 }
 
@@ -6418,6 +7820,49 @@ public object FfiConverterTypePayeeItem: FfiConverterRustBuffer<PayeeItem> {
             FfiConverterOptionalString.write(value.`envelopeId`, buf)
             FfiConverterString.write(value.`accountId`, buf)
             FfiConverterUInt.write(value.`times`, buf)
+    }
+}
+
+
+
+data class PeriodItem (
+    var `start`: kotlin.String
+    , 
+    var `end`: kotlin.String
+    , 
+    var `days`: kotlin.Long
+    
+){
+    
+
+    
+
+    
+    companion object
+}
+
+/**
+ * @suppress
+ */
+public object FfiConverterTypePeriodItem: FfiConverterRustBuffer<PeriodItem> {
+    override fun read(buf: ByteBuffer): PeriodItem {
+        return PeriodItem(
+            FfiConverterString.read(buf),
+            FfiConverterString.read(buf),
+            FfiConverterLong.read(buf),
+        )
+    }
+
+    override fun allocationSize(value: PeriodItem) = (
+            FfiConverterString.allocationSize(value.`start`) +
+            FfiConverterString.allocationSize(value.`end`) +
+            FfiConverterLong.allocationSize(value.`days`)
+    )
+
+    override fun write(value: PeriodItem, buf: ByteBuffer) {
+            FfiConverterString.write(value.`start`, buf)
+            FfiConverterString.write(value.`end`, buf)
+            FfiConverterLong.write(value.`days`, buf)
     }
 }
 
@@ -6486,6 +7931,64 @@ public object FfiConverterTypePersonItem: FfiConverterRustBuffer<PersonItem> {
 
 
 
+data class PredictionItem (
+    var `start`: kotlin.String
+    , 
+    var `end`: kotlin.String
+    , 
+    var `ovulation`: kotlin.String
+    , 
+    var `fertileFrom`: kotlin.String
+    , 
+    var `fertileTo`: kotlin.String
+    , 
+    var `pmsFrom`: kotlin.String
+    
+){
+    
+
+    
+
+    
+    companion object
+}
+
+/**
+ * @suppress
+ */
+public object FfiConverterTypePredictionItem: FfiConverterRustBuffer<PredictionItem> {
+    override fun read(buf: ByteBuffer): PredictionItem {
+        return PredictionItem(
+            FfiConverterString.read(buf),
+            FfiConverterString.read(buf),
+            FfiConverterString.read(buf),
+            FfiConverterString.read(buf),
+            FfiConverterString.read(buf),
+            FfiConverterString.read(buf),
+        )
+    }
+
+    override fun allocationSize(value: PredictionItem) = (
+            FfiConverterString.allocationSize(value.`start`) +
+            FfiConverterString.allocationSize(value.`end`) +
+            FfiConverterString.allocationSize(value.`ovulation`) +
+            FfiConverterString.allocationSize(value.`fertileFrom`) +
+            FfiConverterString.allocationSize(value.`fertileTo`) +
+            FfiConverterString.allocationSize(value.`pmsFrom`)
+    )
+
+    override fun write(value: PredictionItem, buf: ByteBuffer) {
+            FfiConverterString.write(value.`start`, buf)
+            FfiConverterString.write(value.`end`, buf)
+            FfiConverterString.write(value.`ovulation`, buf)
+            FfiConverterString.write(value.`fertileFrom`, buf)
+            FfiConverterString.write(value.`fertileTo`, buf)
+            FfiConverterString.write(value.`pmsFrom`, buf)
+    }
+}
+
+
+
 /**
  * A QR code as a square of modules (the UI draws it).
  */
@@ -6525,6 +8028,70 @@ public object FfiConverterTypeQrMatrix: FfiConverterRustBuffer<QrMatrix> {
     override fun write(value: QrMatrix, buf: ByteBuffer) {
             FfiConverterUInt.write(value.`size`, buf)
             FfiConverterSequenceBoolean.write(value.`dark`, buf)
+    }
+}
+
+
+
+/**
+ * A device that joined one of our shared lists recently ([`KtNode::recent_joins`]).
+ */
+data class RecentJoinItem (
+    var `groupId`: kotlin.String
+    , 
+    var `deviceId`: kotlin.String
+    , 
+    /**
+     * The name it gave itself (may be empty) and who let it in.
+     */
+    var `name`: kotlin.String
+    , 
+    var `by`: kotlin.String
+    , 
+    var `listName`: kotlin.String
+    , 
+    var `joinedMs`: kotlin.ULong
+    
+){
+    
+
+    
+
+    
+    companion object
+}
+
+/**
+ * @suppress
+ */
+public object FfiConverterTypeRecentJoinItem: FfiConverterRustBuffer<RecentJoinItem> {
+    override fun read(buf: ByteBuffer): RecentJoinItem {
+        return RecentJoinItem(
+            FfiConverterString.read(buf),
+            FfiConverterString.read(buf),
+            FfiConverterString.read(buf),
+            FfiConverterString.read(buf),
+            FfiConverterString.read(buf),
+            FfiConverterULong.read(buf),
+        )
+    }
+
+    override fun allocationSize(value: RecentJoinItem) = (
+            FfiConverterString.allocationSize(value.`groupId`) +
+            FfiConverterString.allocationSize(value.`deviceId`) +
+            FfiConverterString.allocationSize(value.`name`) +
+            FfiConverterString.allocationSize(value.`by`) +
+            FfiConverterString.allocationSize(value.`listName`) +
+            FfiConverterULong.allocationSize(value.`joinedMs`)
+    )
+
+    override fun write(value: RecentJoinItem, buf: ByteBuffer) {
+            FfiConverterString.write(value.`groupId`, buf)
+            FfiConverterString.write(value.`deviceId`, buf)
+            FfiConverterString.write(value.`name`, buf)
+            FfiConverterString.write(value.`by`, buf)
+            FfiConverterString.write(value.`listName`, buf)
+            FfiConverterULong.write(value.`joinedMs`, buf)
     }
 }
 
@@ -8107,6 +9674,34 @@ public object FfiConverterSequenceTypeAccountItem: FfiConverterRustBuffer<List<A
 /**
  * @suppress
  */
+public object FfiConverterSequenceTypeCalItem: FfiConverterRustBuffer<List<CalItem>> {
+    override fun read(buf: ByteBuffer): List<CalItem> {
+        val len = buf.getInt()
+        return List<CalItem>(len) {
+            FfiConverterTypeCalItem.read(buf)
+        }
+    }
+
+    override fun allocationSize(value: List<CalItem>): ULong {
+        val sizeForLength = 4UL
+        val sizeForItems = value.map { FfiConverterTypeCalItem.allocationSize(it) }.sum()
+        return sizeForLength + sizeForItems
+    }
+
+    override fun write(value: List<CalItem>, buf: ByteBuffer) {
+        buf.putInt(value.size)
+        value.iterator().forEach {
+            FfiConverterTypeCalItem.write(it, buf)
+        }
+    }
+}
+
+
+
+
+/**
+ * @suppress
+ */
 public object FfiConverterSequenceTypeChangeItem: FfiConverterRustBuffer<List<ChangeItem>> {
     override fun read(buf: ByteBuffer): List<ChangeItem> {
         val len = buf.getInt()
@@ -8125,6 +9720,90 @@ public object FfiConverterSequenceTypeChangeItem: FfiConverterRustBuffer<List<Ch
         buf.putInt(value.size)
         value.iterator().forEach {
             FfiConverterTypeChangeItem.write(it, buf)
+        }
+    }
+}
+
+
+
+
+/**
+ * @suppress
+ */
+public object FfiConverterSequenceTypeCustomTagItem: FfiConverterRustBuffer<List<CustomTagItem>> {
+    override fun read(buf: ByteBuffer): List<CustomTagItem> {
+        val len = buf.getInt()
+        return List<CustomTagItem>(len) {
+            FfiConverterTypeCustomTagItem.read(buf)
+        }
+    }
+
+    override fun allocationSize(value: List<CustomTagItem>): ULong {
+        val sizeForLength = 4UL
+        val sizeForItems = value.map { FfiConverterTypeCustomTagItem.allocationSize(it) }.sum()
+        return sizeForLength + sizeForItems
+    }
+
+    override fun write(value: List<CustomTagItem>, buf: ByteBuffer) {
+        buf.putInt(value.size)
+        value.iterator().forEach {
+            FfiConverterTypeCustomTagItem.write(it, buf)
+        }
+    }
+}
+
+
+
+
+/**
+ * @suppress
+ */
+public object FfiConverterSequenceTypeCycleDay: FfiConverterRustBuffer<List<CycleDay>> {
+    override fun read(buf: ByteBuffer): List<CycleDay> {
+        val len = buf.getInt()
+        return List<CycleDay>(len) {
+            FfiConverterTypeCycleDay.read(buf)
+        }
+    }
+
+    override fun allocationSize(value: List<CycleDay>): ULong {
+        val sizeForLength = 4UL
+        val sizeForItems = value.map { FfiConverterTypeCycleDay.allocationSize(it) }.sum()
+        return sizeForLength + sizeForItems
+    }
+
+    override fun write(value: List<CycleDay>, buf: ByteBuffer) {
+        buf.putInt(value.size)
+        value.iterator().forEach {
+            FfiConverterTypeCycleDay.write(it, buf)
+        }
+    }
+}
+
+
+
+
+/**
+ * @suppress
+ */
+public object FfiConverterSequenceTypeCycleLen: FfiConverterRustBuffer<List<CycleLen>> {
+    override fun read(buf: ByteBuffer): List<CycleLen> {
+        val len = buf.getInt()
+        return List<CycleLen>(len) {
+            FfiConverterTypeCycleLen.read(buf)
+        }
+    }
+
+    override fun allocationSize(value: List<CycleLen>): ULong {
+        val sizeForLength = 4UL
+        val sizeForItems = value.map { FfiConverterTypeCycleLen.allocationSize(it) }.sum()
+        return sizeForLength + sizeForItems
+    }
+
+    override fun write(value: List<CycleLen>, buf: ByteBuffer) {
+        buf.putInt(value.size)
+        value.iterator().forEach {
+            FfiConverterTypeCycleLen.write(it, buf)
         }
     }
 }
@@ -8387,6 +10066,34 @@ public object FfiConverterSequenceTypePartItem: FfiConverterRustBuffer<List<Part
 /**
  * @suppress
  */
+public object FfiConverterSequenceTypePatternItem: FfiConverterRustBuffer<List<PatternItem>> {
+    override fun read(buf: ByteBuffer): List<PatternItem> {
+        val len = buf.getInt()
+        return List<PatternItem>(len) {
+            FfiConverterTypePatternItem.read(buf)
+        }
+    }
+
+    override fun allocationSize(value: List<PatternItem>): ULong {
+        val sizeForLength = 4UL
+        val sizeForItems = value.map { FfiConverterTypePatternItem.allocationSize(it) }.sum()
+        return sizeForLength + sizeForItems
+    }
+
+    override fun write(value: List<PatternItem>, buf: ByteBuffer) {
+        buf.putInt(value.size)
+        value.iterator().forEach {
+            FfiConverterTypePatternItem.write(it, buf)
+        }
+    }
+}
+
+
+
+
+/**
+ * @suppress
+ */
 public object FfiConverterSequenceTypePayeeItem: FfiConverterRustBuffer<List<PayeeItem>> {
     override fun read(buf: ByteBuffer): List<PayeeItem> {
         val len = buf.getInt()
@@ -8415,6 +10122,34 @@ public object FfiConverterSequenceTypePayeeItem: FfiConverterRustBuffer<List<Pay
 /**
  * @suppress
  */
+public object FfiConverterSequenceTypePeriodItem: FfiConverterRustBuffer<List<PeriodItem>> {
+    override fun read(buf: ByteBuffer): List<PeriodItem> {
+        val len = buf.getInt()
+        return List<PeriodItem>(len) {
+            FfiConverterTypePeriodItem.read(buf)
+        }
+    }
+
+    override fun allocationSize(value: List<PeriodItem>): ULong {
+        val sizeForLength = 4UL
+        val sizeForItems = value.map { FfiConverterTypePeriodItem.allocationSize(it) }.sum()
+        return sizeForLength + sizeForItems
+    }
+
+    override fun write(value: List<PeriodItem>, buf: ByteBuffer) {
+        buf.putInt(value.size)
+        value.iterator().forEach {
+            FfiConverterTypePeriodItem.write(it, buf)
+        }
+    }
+}
+
+
+
+
+/**
+ * @suppress
+ */
 public object FfiConverterSequenceTypePersonItem: FfiConverterRustBuffer<List<PersonItem>> {
     override fun read(buf: ByteBuffer): List<PersonItem> {
         val len = buf.getInt()
@@ -8433,6 +10168,62 @@ public object FfiConverterSequenceTypePersonItem: FfiConverterRustBuffer<List<Pe
         buf.putInt(value.size)
         value.iterator().forEach {
             FfiConverterTypePersonItem.write(it, buf)
+        }
+    }
+}
+
+
+
+
+/**
+ * @suppress
+ */
+public object FfiConverterSequenceTypePredictionItem: FfiConverterRustBuffer<List<PredictionItem>> {
+    override fun read(buf: ByteBuffer): List<PredictionItem> {
+        val len = buf.getInt()
+        return List<PredictionItem>(len) {
+            FfiConverterTypePredictionItem.read(buf)
+        }
+    }
+
+    override fun allocationSize(value: List<PredictionItem>): ULong {
+        val sizeForLength = 4UL
+        val sizeForItems = value.map { FfiConverterTypePredictionItem.allocationSize(it) }.sum()
+        return sizeForLength + sizeForItems
+    }
+
+    override fun write(value: List<PredictionItem>, buf: ByteBuffer) {
+        buf.putInt(value.size)
+        value.iterator().forEach {
+            FfiConverterTypePredictionItem.write(it, buf)
+        }
+    }
+}
+
+
+
+
+/**
+ * @suppress
+ */
+public object FfiConverterSequenceTypeRecentJoinItem: FfiConverterRustBuffer<List<RecentJoinItem>> {
+    override fun read(buf: ByteBuffer): List<RecentJoinItem> {
+        val len = buf.getInt()
+        return List<RecentJoinItem>(len) {
+            FfiConverterTypeRecentJoinItem.read(buf)
+        }
+    }
+
+    override fun allocationSize(value: List<RecentJoinItem>): ULong {
+        val sizeForLength = 4UL
+        val sizeForItems = value.map { FfiConverterTypeRecentJoinItem.allocationSize(it) }.sum()
+        return sizeForLength + sizeForItems
+    }
+
+    override fun write(value: List<RecentJoinItem>, buf: ByteBuffer) {
+        buf.putInt(value.size)
+        value.iterator().forEach {
+            FfiConverterTypeRecentJoinItem.write(it, buf)
         }
     }
 }
@@ -8685,6 +10476,45 @@ public object FfiConverterSequenceTypeTxItem: FfiConverterRustBuffer<List<TxItem
         buf.putInt(value.size)
         value.iterator().forEach {
             FfiConverterTypeTxItem.write(it, buf)
+        }
+    }
+}
+
+
+
+
+/**
+ * @suppress
+ */
+public object FfiConverterMapStringString: FfiConverterRustBuffer<Map<kotlin.String, kotlin.String>> {
+    override fun read(buf: ByteBuffer): Map<kotlin.String, kotlin.String> {
+        val len = buf.getInt()
+        return buildMap<kotlin.String, kotlin.String>(len) {
+            repeat(len) {
+                val k = FfiConverterString.read(buf)
+                val v = FfiConverterString.read(buf)
+                this[k] = v
+            }
+        }
+    }
+
+    override fun allocationSize(value: Map<kotlin.String, kotlin.String>): ULong {
+        val spaceForMapSize = 4UL
+        val spaceForChildren = value.map { (k, v) ->
+            FfiConverterString.allocationSize(k) +
+            FfiConverterString.allocationSize(v)
+        }.sum()
+        return spaceForMapSize + spaceForChildren
+    }
+
+    override fun write(value: Map<kotlin.String, kotlin.String>, buf: ByteBuffer) {
+        buf.putInt(value.size)
+        // The parens on `(k, v)` here ensure we're calling the right method,
+        // which is important for compatibility with older android devices.
+        // Ref https://blog.danlew.net/2017/03/16/kotlin-puzzler-whose-line-is-it-anyways/
+        value.forEach { (k, v) ->
+            FfiConverterString.write(k, buf)
+            FfiConverterString.write(v, buf)
         }
     }
 }

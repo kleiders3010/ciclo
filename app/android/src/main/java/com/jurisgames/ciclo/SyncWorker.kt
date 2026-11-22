@@ -15,6 +15,7 @@ class SyncWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, 
         val node = app.node
         if (!node.settings().syncInBackground) return Result.success() // sync only while open
         app.reportDeviceState()
+        Reminders.publishPartner(node) // a new day reaches the partner even when Ciclo stays closed (U-C2)
         val started = android.os.SystemClock.elapsedRealtime()
         node.flush(10_000uL) // what this device hasn't sent yet goes first, even if the job is cut short
         val report = node.syncNow()

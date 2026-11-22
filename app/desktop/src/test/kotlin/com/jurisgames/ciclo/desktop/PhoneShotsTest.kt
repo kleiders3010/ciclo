@@ -4,33 +4,27 @@ import androidx.compose.ui.graphics.toAwtImage
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isRoot
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import com.jurisgames.ciclo.core.KtNode
 import com.jurisgames.ciclo.core.NodeOptions
-import com.jurisgames.ciclo.core.PartItem
 import com.jurisgames.ciclo.core.Platform
-import com.jurisgames.ciclo.core.TxEdit
 import com.jurisgames.ciclo.ui.CicloApp
-import com.jurisgames.ciclo.ui.budgetHue
-import com.jurisgames.ciclo.ui.today
 import org.junit.Test
 import java.io.File
 import java.nio.file.Files
+import java.time.LocalDate
 
 /**
- * Phone-sized pictures of a lived-in budget for a review (-Pshots=<folder>); skipped otherwise.
- * Also checks the phone layout keeps the "Spent…" bar on screen.
+ * A lived-in journal on a phone-sized screen: Today, Calendar, Insights and the day log all draw and show what was
+ * logged. With -Pshots=<folder> it also saves the pictures for a review (and -Pstore for the Play size).
  */
 @OptIn(ExperimentalTestApi::class)
 class PhoneShotsTest {
-    // -Pstore: Google Play size (1080x1920 at a phone's 2.625 density) instead of the 412x860 review size
     private val store = System.getProperty("kt.shots.store") == "true"
-    // sample names in the language the shots are taken in (-Plang=es for the Spanish store listing)
-    private val es = System.getProperty("kt.lang") == "es"
-    private fun t(en: String, sp: String) = if (es) sp else en
     private val out = System.getProperty("kt.shots")?.takeIf { it.isNotBlank() }?.let { File(it).apply { mkdirs() } }
 
     @Test
@@ -38,30 +32,28 @@ class PhoneShotsTest {
         val home = Files.createTempDirectory("kt-phone").toFile()
         val n = KtNode.open(File(home, "identity").path, File(home, "data").path, System.getProperty("kt.worker"),
             NodeOptions(Platform.DESKTOP, listOf("ws://127.0.0.1:9"), false, false, "127.0.0.1:0", "", ""))
-        val l = n.createList(null, t("Home", "Casa"))
-        n.setListStyle(l.id, budgetHue(0), 1u, null)
-        n.setCurrency(l.id, "$")
-        val bank = n.setAccount(l.id, null, t("Bank", "Banco"), "bank", 2_480_00)
-        n.setAccount(l.id, null, t("Cash", "Efectivo"), "cash", 60_00)
-        val envs = listOf(
-            Triple(t("Groceries", "Supermercado"), 400_00L, t("Food", "Comida")), Triple(t("Eating out", "Salidas"), 80_00L, t("Food", "Comida")),
-            Triple(t("Rent", "Alquiler"), 900_00L, t("Bills", "Cuentas")), Triple(t("Phone", "Celular"), 25_00L, t("Bills", "Cuentas")), Triple(t("Fun", "Gustos"), 60_00L, ""),
-        ).map { (name, amt, g) -> n.setEnvelope(l.id, null, name, amt, "m", null, g) }
-        val gifts = n.setEnvelope(l.id, null, t("Gifts", "Regalos"), 600_00, "y", null, t("Saving", "Ahorro"))
-        n.setEnvelope(l.id, null, t("Trip", "Viaje"), 1_000_00, "g", java.time.LocalDate.now().plusMonths(8).withDayOfMonth(1).toString(), t("Saving", "Ahorro"))
-        val plan = n.fillPlan(l.id, "add", today())
-        n.setTx(l.id, null, TxEdit("fill", today(), plan.sumOf { it.cents }, "", "", "", "", plan))
-        n.setTx(l.id, null, TxEdit("exp", today(), 37_50, bank, "", t("Market", "Verdulería"), "", listOf(PartItem(envs[0], "", 37_50))))
-        n.setTx(l.id, null, TxEdit("exp", today(), 37_45, bank, "", t("Phone bill", "Factura del celular"), "", listOf(PartItem(envs[3], "", 37_45))))
-        n.setTx(l.id, null, TxEdit("exp", today(), 22_00, bank, "", t("Pizza", "Pizza"), "", listOf(PartItem(envs[1], "", 22_00))))
-        check(gifts.isNotEmpty())
-        java.io.File(n.dataDir(), "ui-last-list").writeText(l.id)
+        val l = n.createList(null, "Mi ciclo".takeIf { System.getProperty("kt.lang") == "es" } ?: "My cycle")
+        val today = LocalDate.now()
+        // four finished cycles of 27-30 days and the current one, cramps on days 1-2, acne before each period
+        val starts = listOf(117L, 89L, 61L, 32L, 4L).map { today.minusDays(it) }
+        for (s in starts) {
+            n.cycleLogPeriod(l.id, s.toString(), 5)
+            n.cycleSetTag(l.id, s.toString(), "pain.cramps", true)
+            n.cycleSetTag(l.id, s.plusDays(1).toString(), "pain.cramps", true)
+            n.cycleSetTag(l.id, s.minusDays(2).toString(), "skin.acne", true)
+        }
+        n.cycleSetFlow(l.id, today.toString(), 0)
+        for (k in 0L..3L) n.cycleSetTemp(l.id, today.minusDays(k).toString(), 3640 + (k * 7 % 20))
+        n.cycleSetTag(l.id, today.toString(), "feel.happy", true)
+        n.cycleSetTag(l.id, today.toString(), "energy.high", true)
+        n.cycleSetNote(l.id, today.toString(), "Long walk after work")
         setContent {
             if (store) androidx.compose.runtime.CompositionLocalProvider(androidx.compose.ui.platform.LocalDensity provides androidx.compose.ui.unit.Density(2.625f)) { CicloApp(n) }
             else CicloApp(n)
         }
-        waitUntil(timeoutMillis = 5_000) { onAllNodes(hasTestTag("env-" + t("Groceries", "Supermercado")), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() }
-        check(onAllNodes(hasTestTag("addSpent")).fetchSemanticsNodes().isNotEmpty()) { "the Spent bar is there on a phone" }
+        waitUntil(timeoutMillis = 5_000) { onAllNodes(hasTestTag("headline"), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() }
+        check(onAllNodes(hasText("Day 5 of your cycle", substring = true), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() || System.getProperty("kt.lang") == "es") { "Today shows the cycle day" }
+        check(onAllNodes(hasTestTag("notContraception"), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty()) { "Today says predictions are not birth control" }
         fun shot(name: String) {
             val o = out ?: return
             waitForIdle()
@@ -80,16 +72,23 @@ class PhoneShotsTest {
             g.dispose()
             javax.imageio.ImageIO.write(img, "png", File(o, (if (store) "store-" else "phone-") + "$name.png"))
         }
-        shot("1-envelopes")
-        onNodeWithTag("env-" + t("Groceries", "Supermercado")).performClick()
-        waitUntil(timeoutMillis = 5_000) { onAllNodes(hasTestTag("envPace"), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() }
-        shot("2-envelope")
-        onNodeWithTag("envDone").performClick()
-        onNodeWithTag("addSpent").performClick()
-        waitUntil(timeoutMillis = 5_000) { onAllNodes(hasTestTag("amount"), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() }
-        shot("3-spent")
-        onNodeWithTag("kind-fill").performClick()
-        shot("4-move")
+        shot("1-today")
+        onNodeWithTag("tabCalendar").performClick()
+        waitUntil(timeoutMillis = 5_000) { onAllNodes(hasTestTag("legend"), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() }
+        check(onAllNodes(hasTestTag("day-" + today), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty()) { "the calendar shows this month" }
+        shot("2-calendar")
+        onNodeWithTag("tabInsights").performClick()
+        waitUntil(timeoutMillis = 5_000) { onAllNodes(hasTestTag("cycleBars"), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() }
+        check(onAllNodes(hasTestTag("pattern-pain.cramps"), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty()) { "the cramps pattern shows" }
+        shot("3-insights")
+        onNodeWithTag("tabToday").performClick()
+        onNodeWithTag("logToday").performClick()
+        waitUntil(timeoutMillis = 5_000) { onAllNodes(hasTestTag("logDate"), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() }
+        check(onAllNodes(hasTestTag("tag-feel.happy"), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty()) { "the day log lists the tags" }
+        shot("4-log")
+        onNodeWithTag("tag-pain.headache").performClick()
+        waitUntil(timeoutMillis = 5_000) { n.cycleDay(l.id, today.toString()).tags.contains("pain.headache") }
+        onNodeWithTag("logDone").performClick()
         n.close()
     }
 }

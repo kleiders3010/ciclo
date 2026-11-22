@@ -31,7 +31,7 @@ class DesktopRestoreTest {
         val old = openIn(Files.createTempDirectory("kt-old").toFile())
         old.setDisplayName("Alex")
         val diary = old.createList(null, "Diary")
-        old.setEnvelope(diary.id, null, "private note", 0, "m", null, "")
+        old.cycleSetNote(diary.id, "2026-11-20", "private note")
         val file = File(Files.createTempDirectory("kt-bk").toFile(), "tasks.ktbackup")
         old.writeBackup(file.path)
         old.close()
@@ -42,21 +42,21 @@ class DesktopRestoreTest {
         rule.setContent { CicloApp(node.value, onRestore = { node.value = restoreNode(node.value, file.readBytes()).getOrThrow() }) }
         rule.waitUntil(5_000) { rule.onAllNodes(hasTestTag("restore")).fetchSemanticsNodes().isNotEmpty() }
         rule.onNodeWithTag("restore").performClick()
-        rule.waitUntil(20_000) { rule.onAllNodes(hasTestTag("list-Diary")).fetchSemanticsNodes().isNotEmpty() }
-        check(rule.onAllNodes(hasTestTag("restoredInfo")).fetchSemanticsNodes().isNotEmpty())
+        rule.waitUntil(20_000) { node.value !== fresh && runCatching { node.value.lists().any { it.name == "Diary" } }.getOrDefault(false) } // Ciclo shows the cycle, not list tabs
+        rule.waitForIdle()
         check(rule.onAllNodes(hasTestTag("restore")).fetchSemanticsNodes().isEmpty()) { "no restore offer once there are lists" }
         val n = node.value
         check(n.displayName() == "Alex")
-        check(n.budget(n.lists().first { it.name == "Diary" }.id, "2026-11-20").envelopes.single().name == "private note")
-        // The CSV export through the bridge starts with its header.
-        check(n.exportCsv(n.lists().first { it.name == "Diary" }.id).startsWith("date,kind,payee,envelope,account,amount,note,by"))
+        check(n.cycleDay(n.lists().first { it.name == "Diary" }.id, "2026-11-20").note == "private note")
+        // The cycle CSV export through the bridge starts with its header (was a Sobres leftover).
+        check(n.exportCsv(n.lists().first { it.name == "Diary" }.id, emptyMap()).startsWith("date,flow,")) // pinned: the CSV's first column names
     }
 
     @Test
     fun aLockedBackupAsksForItsPassword() {
         val old = openIn(Files.createTempDirectory("kt-old").toFile())
         val diary = old.createList(null, "Diary")
-        old.setEnvelope(diary.id, null, "private note", 0, "m", null, "")
+        old.cycleSetNote(diary.id, "2026-11-20", "private note")
         old.setBackupPassword("correct horse")
         val file = File(Files.createTempDirectory("kt-bk").toFile(), "tasks.ktbackup")
         old.writeBackup(file.path)
@@ -79,9 +79,9 @@ class DesktopRestoreTest {
         rule.onNodeWithTag("restorePw").performTextClearance()
         rule.onNodeWithTag("restorePw").performTextInput("correct horse")
         rule.onNodeWithTag("restorePwOk").performClick()
-        rule.waitUntil(30_000) { rule.onAllNodes(hasTestTag("list-Diary")).fetchSemanticsNodes().isNotEmpty() }
+        rule.waitUntil(30_000) { node.value !== fresh && runCatching { node.value.lists().any { it.name == "Diary" } }.getOrDefault(false) } // Ciclo shows the cycle, not list tabs
         val n = node.value
-        check(n.budget(n.lists().first { it.name == "Diary" }.id, "2026-11-20").envelopes.single().name == "private note") // pinned: a restore brings back what was backed up
+        check(n.cycleDay(n.lists().first { it.name == "Diary" }.id, "2026-11-20").note == "private note") // pinned: a restore brings back what was backed up
         check(n.hasBackupPassword()) { "the new computer keeps the password for its own backups" }
     }
 }

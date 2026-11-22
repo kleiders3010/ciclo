@@ -23,9 +23,9 @@ compose.desktop {
         nativeDistributions {
             targetFormats(org.jetbrains.compose.desktop.application.dsl.TargetFormat.Msi)
             packageName = "Ciclo"
-            packageVersion = "1.0.3"
+            packageVersion = "1.0.0"
             vendor = "Juris Games"
-            description = "Shared envelope budget, no accounts, no servers"
+            description = "Period and cycle journal, no accounts, free"
             // JNA needs sun.misc.Unsafe; the rest is Compose's default runtime.
             modules("jdk.unsupported", "java.naming")
             // scripts/package-desktop.sh puts kt_ffi and the import worker here, per OS.
@@ -53,3 +53,21 @@ tasks.test {
     // The app follows the device language; tests run in English unless asked: -Plang=es
     systemProperty("kt.lang", (project.findProperty("lang") as String?) ?: "en")
 }
+
+// Desktop and Android carry the same version: the update notice compares the manifest against VERSION_CODE, and
+// Tasks 1.0.11 / Sobres 1.0.3 shipped desktop builds one code behind (they offered the version already running).
+// Packaging stops when they differ. (Also pinned in kt-ffi's diagnostics test.)
+val androidGradle = rootDir.resolve("android/build.gradle.kts")
+val desktopMain = file("src/main/kotlin").walk().first { it.name == "Main.kt" }
+val desktopPackageVersion = compose.desktop.application.nativeDistributions.packageVersion
+val versionMatch by tasks.registering {
+    doLast {
+        val gradle = androidGradle.readText()
+        val code = Regex("versionCode = (\\d+)").find(gradle)!!.groupValues[1]
+        val name = Regex("versionName = \"([^\"]+)\"").find(gradle)!!.groupValues[1]
+        check(desktopMain.readText().contains("const val VERSION_CODE = ${code}uL")) { "desktop VERSION_CODE is not the Android versionCode $code" }
+        check(desktopPackageVersion == name) { "desktop packageVersion $desktopPackageVersion is not the Android versionName $name" }
+    }
+}
+tasks.matching { it.name.startsWith("package") || it.name.startsWith("createDistributable") || it.name.startsWith("createRelease") }
+    .configureEach { dependsOn(versionMatch) }

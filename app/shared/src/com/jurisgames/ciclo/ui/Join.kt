@@ -11,6 +11,8 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -38,8 +40,6 @@ import kotlinx.coroutines.withContext
 
 const val CODE_WORDS = 8
 
-/** Playful lines while an invite is being found (UX-NOTES "Waiting and loading"). */
-val FINDING = listOf(tr("Finding the list…"), tr("Asking around…"), tr("Knocking on doors…"), tr("Following the trail…"), tr("Almost there, probably…"))
 
 /**
  * What a typed word box should become: the full word once it is certain (4 letters typed, or
@@ -58,6 +58,16 @@ fun settleWord(typed: String, complete: (String) -> String?): String? {
  * pasting a whole code or link anywhere fills every box and joins right away.
  */
 @OptIn(ExperimentalLayoutApi::class)
+/** U-S11 (general): the partner sees whose summary it is, so a person without a name is asked where sharing happens. */
+@Composable
+internal fun NameAsk(node: com.jurisgames.ciclo.core.KtNode) {
+    val had = remember(node) { node.displayName().isNotBlank() }
+    if (had) return
+    var name by remember { mutableStateOf("") }
+    OutlinedTextField(name, { name = it; runCatching { node.setDisplayName(it.trim()) } }, singleLine = true,
+        label = { Text(tr("Your name (so your partner knows whose it is)")) }, modifier = androidx.compose.ui.Modifier.fillMaxWidth().testTag("askName"))
+}
+
 @Composable
 fun JoinDialog(env: Env, prefilled: String?, onJoined: (String) -> Unit, onClose: () -> Unit) {
     val node = env.node
@@ -67,7 +77,6 @@ fun JoinDialog(env: Env, prefilled: String?, onJoined: (String) -> Unit, onClose
     var link by remember { mutableStateOf<String?>(null) }
     var busy by remember { mutableStateOf(false) }
     var result by remember { mutableStateOf("") }
-    var line by remember { mutableIntStateOf(0) }
     var slow by remember { mutableStateOf(false) }
     val clip = LocalClipboardManager.current
 
@@ -84,7 +93,7 @@ fun JoinDialog(env: Env, prefilled: String?, onJoined: (String) -> Unit, onClose
                     else -> tr("Asked to join {group} (from {who}). You're let in as soon as they're online.", "group" to r.groupName, "who" to r.inviterName)
                 }
             } catch (e: Exception) {
-                tr(e.message ?: tr("That code didn't work. Check it with the person who sent it."))
+                userError(e, tr("That code didn't work. Check it with the person who sent it."))
             }
             busy = false
         }
@@ -112,7 +121,7 @@ fun JoinDialog(env: Env, prefilled: String?, onJoined: (String) -> Unit, onClose
         if (busy) {
             var n = 0
             while (busy) {
-                delay(1200); n++; line = n % FINDING.size
+                delay(1200); n++
                 if (n >= 2) slow = true
             }
         }
@@ -124,9 +133,10 @@ fun JoinDialog(env: Env, prefilled: String?, onJoined: (String) -> Unit, onClose
             TextButton(onClick = { join(link ?: words.joinToString(" ")) }, enabled = !busy && (link != null || words.all { it.isNotBlank() }), modifier = Modifier.testTag("joinGo")) { Text(tr("Join")) }
         },
         dismissButton = { TextButton(onClick = onClose) { Text(tr("Close")) } },
-        title = { Text(tr("Join a shared list")) },
+        title = { Text(tr("Open a partner's invite")) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                NameAsk(env.node)
                 Text(tr("Enter the code"), style = MaterialTheme.typography.bodyMedium)
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(6.dp), maxItemsInEachRow = 4) {
                     for (i in 0 until CODE_WORDS) {
@@ -149,7 +159,7 @@ fun JoinDialog(env: Env, prefilled: String?, onJoined: (String) -> Unit, onClose
                             },
                             singleLine = true, isError = typo,
                             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.None, autoCorrectEnabled = false, imeAction = if (i + 1 < CODE_WORDS) ImeAction.Next else ImeAction.Go),
-                            modifier = Modifier.width(118.dp).focusRequester(focus[i]).testTag("word-$i"),
+                            modifier = Modifier.widthIn(min = 118.dp).focusRequester(focus[i]).testTag("word-$i"),
                         )
                     }
                 }
@@ -161,7 +171,7 @@ fun JoinDialog(env: Env, prefilled: String?, onJoined: (String) -> Unit, onClose
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         CircularProgressIndicator(Modifier.width(20.dp), strokeWidth = 2.dp)
                         Column {
-                            Text(FINDING[line], modifier = Modifier.testTag("joinFinding"))
+                            Text(tr("Finding the invite…"), modifier = Modifier.testTag("joinFinding")) // one plain line, no jokes (cold UX review U-T21)
                             if (slow) Text(tr("This can take a minute, keep the app open"), style = MaterialTheme.typography.bodySmall)
                         }
                     }

@@ -4,6 +4,7 @@ import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import com.jurisgames.ciclo.core.KtNode
 import com.jurisgames.ciclo.core.NodeOptions
 import com.jurisgames.ciclo.core.Platform
@@ -31,17 +32,20 @@ class DesktopSettingsTest {
         val n = node(home, Platform.DESKTOP)
         rule.setContent { CicloApp(n) }
         rule.onNodeWithTag("settingsOpen").performClick()
-        rule.waitUntil(5_000) { shown("set-notify") }
+        rule.waitUntil(5_000) { shown("set-background") }
+        rule.onNodeWithTag("advancedOpen").performClick() // network help is folded away (U-T11)
+        rule.waitUntil(5_000) { shown("help-off") }
         check(shown("set-relay")) { "relay setting on desktop (D51)" }
         check(shown("set-autostart"))
+        check(!shown("set-notify")) { "the change feed follows tasks only, so Ciclo has no such switch (UX review U-C19)" }
         check(shown("help-on") && shown("help-off") && !shown("help-wifi_and_charging"))
-        rule.onNodeWithTag("set-notify").performClick()
-        rule.onNodeWithTag("help-off").performClick()
+        rule.onNodeWithTag("set-background").performScrollTo().performClick()
+        rule.onNodeWithTag("help-off").performScrollTo().performClick()
         rule.onNodeWithTag("settingsSave").performClick()
         rule.waitUntil(5_000) { !shown("settingsSave") }
         n.close()
         val again = node(home, Platform.DESKTOP).settings()
-        check(!again.notifyChanges && again.helpOthers == "off" && again.relayForOthers == true) { again.toString() }
+        check(!again.syncInBackground && again.helpOthers == "off" && again.relayForOthers == true) { again.toString() }
     }
 
     @Test
@@ -49,7 +53,9 @@ class DesktopSettingsTest {
         val n = node(Files.createTempDirectory("kt-settings-phone").toFile(), Platform.PHONE)
         rule.setContent { CicloApp(n) }
         rule.onNodeWithTag("settingsOpen").performClick()
-        rule.waitUntil(5_000) { shown("set-notify") }
+        rule.waitUntil(5_000) { shown("set-background") }
+        rule.onNodeWithTag("advancedOpen").performClick() // network help is folded away (U-T11)
+        rule.waitUntil(5_000) { shown("help-off") }
         check(!shown("set-relay")) { "not shown at all on phones (D51)" }
         check(!shown("set-autostart"))
         check(shown("help-wifi_and_charging") && shown("help-wifi_while_open") && shown("help-off") && !shown("help-on"))

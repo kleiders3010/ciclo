@@ -16,7 +16,7 @@ object Lang {
     val locale: Locale get() = if (spanish) Locale.forLanguageTag("es-419") else Locale.ENGLISH
 }
 
-fun tr(en: String): String = if (Lang.spanish) ES[en] ?: en else en
+fun tr(en: String): String = if (Lang.spanish) ES[en] ?: ES_CYCLE[en] ?: en else en
 
 fun tr(en: String, vararg args: Pair<String, Any?>): String {
     var s = tr(en)
@@ -24,17 +24,81 @@ fun tr(en: String, vararg args: Pair<String, Any?>): String {
     return s
 }
 
+/**
+ * What an error says to the person: the engine's own words only when they are a known, worded message (a key of
+ * [ES]), else [fallback], which says what to do next. Raw engine text never reaches the screen (cold UX review U-T10).
+ */
+fun userError(e: Throwable?, fallback: String): String {
+    // The engine's own text (the generated exception's `message` is "msg=…", which matched no key before).
+    val m = ((e as? com.jurisgames.ciclo.core.KtException.Failed)?.msg ?: e?.message)?.trim()
+    // U-S10: an engine message is never shown as is (English showed the raw text).
+    CORE_WORDS[m]?.let { return tr(it) }
+    // Not kept for Diagnostics: its export promises no user content, and a raw error may quote some.
+    return fallback
+}
+
+/** The engine's messages that reach people, in the app's own words (the keys are the engine's text). */
+val CORE_WORDS: Map<String?, String> = mapOf(
+    "not a backup file" to "This isn't a Ciclo backup file.",
+    "not a Tasks backup file" to "This isn't a Ciclo backup file.",
+    "This isn't a Ciclo backup file." to "This isn't a Ciclo backup file.",
+    "wrong backup password" to "Wrong backup password.",
+    "password too short" to "The password is too short.",
+    "no link code found for these words: check them, or it may have expired" to "No link code has these words. Check them; a code also stops working after a while.",
+    "this is an invite, not a device link: use \"Join with code\"" to INVITE_NOT_LINK,
+    "this is an invite, not a device link code: use \"Join with code\"" to INVITE_NOT_LINK,
+    INVITE_NOT_LINK to INVITE_NOT_LINK,
+    "This is a device link code, not an invite. Open ☰ › Link to my other device." to "This is a device link code, not an invite. Open ☰ › Link to my other device.",
+    "this is a device link, not an invite: use it to link this device to your account" to LINK_NOT_INVITE,
+    "this is a device link code, not an invite: use it to link this device to your account" to LINK_NOT_INVITE,
+)
+
+const val INVITE_NOT_LINK = "This is a partner's invite, not a device link. Open it with ☰ › Open a partner's invite."
+const val LINK_NOT_INVITE = "This is a code to link your own devices, not a partner's invite. Use it in ☰ › Link to my other device."
+
 /** Day and month names without the trailing dot some languages put on short forms ("vie." -> "vie"). */
 fun shortName(s: String): String = s.replace(".", "")
 
 /** The other device's account summary ("Ana's phone · 2 lists (Groceries, Chores)") is made in its language. */
-fun trSummary(s: String): String = if (!Lang.spanish) s else s
-    .replace("no lists yet", "todavía sin listas")
-    .replace(Regex("""\b1 list \("""), "1 lista (")
-    .replace(Regex("""\b(\d+) lists \("""), "$1 listas (")
-    .replace("a device", "un dispositivo")
+fun trSummary(s: String): String = s // U-C7: Ciclo has journals and summaries, not lists: only their names are shown
+    .replace("no lists yet", tr("nothing yet"))
+    .replace(Regex("""\b\d+ lists? \(([^)]*)\)"""), "$1")
+    .replace("a device", tr("a device"))
 
 val ES: Map<String, String> = mapOf(
+    "Your name (so your partner knows whose it is)" to "Tu nombre (para que tu pareja sepa de quién es)",
+    "Someone" to "Alguien",
+    "This isn't a Ciclo backup file." to "No es un archivo de copia de Ciclo.",
+    "{who} joined {list}, let in by {by}'s invite" to "{who} se unió a {list}, con la invitación de {by}",
+    "{who} joined {list}" to "{who} se unió a {list}",
+    "A new device" to "Un dispositivo nuevo",
+    "OK" to "OK",
+    "Deleted {name} for everyone in it" to "Borraste {name} para todos los que la usan",
+    "Delete list for everyone" to "Borrar la lista para todos",
+    "Light or dark" to "Claro u oscuro",
+    "Same as the system" to "Igual que el sistema",
+    "Light" to "Claro",
+    "Dark" to "Oscuro",
+    "Advanced" to "Avanzado",
+    "Lets this device pass along encrypted updates for other Ciclo users. It can't read them. Uses some data and battery." to "Deja que este dispositivo pase actualizaciones cifradas de otras personas que usan Ciclo. No las puede leer. Usa algo de datos y batería.",
+    "When on, other Ciclo users whose devices can't reach each other directly can connect through this computer. Everything stays encrypted." to "Si está activado, otras personas que usan Ciclo y cuyos dispositivos no se alcanzan directamente pueden conectarse a través de esta computadora. Todo sigue cifrado.",
+    "Link another device" to "Vincular otro dispositivo",
+    "On your other device, open ☰ › Link to my other device, then enter this code or scan it." to "En tu otro dispositivo abrí ☰ › Vincular con mi otro dispositivo y escribí este código o escanealo.",
+    "Your devices ({n}) · Link another device" to "Tus dispositivos ({n}) · Vincular otro",
+    "Link to my other device" to "Vincular con mi otro dispositivo",
+    "This is an invite to a list, not a device link. Open ☰ › Join a shared list." to "Esto es una invitación, no un vínculo de dispositivo: usá ☰ › Unirme a una lista compartida",
+    "This is a device link code, not an invite. Open ☰ › Link to my other device." to "Esto es un código para vincular un dispositivo, no una invitación. Abrí ☰ › Vincular con mi otro dispositivo.",
+    "Undo recent changes" to "Deshacer cambios recientes",
+    "Last hour" to "Última hora",
+    "Last day" to "Último día",
+    "Last 3 days" to "Últimos 3 días",
+    "Last 30 days" to "Últimos 30 días",
+    "Free and open source. No ads, no account." to "Gratis y de código abierto. Sin anuncios, sin cuenta.",
+    "Source code" to "Código fuente",
+    "Privacy" to "Privacidad",
+    "Couldn't save. Try again." to "No se pudo guardar. Probá de nuevo.",
+    "Couldn't share. Check your connection and try again." to "No se pudo compartir. Revisá la conexión y probá de nuevo.",
+    "Couldn't undo. Try again." to "No se pudo deshacer. Probá de nuevo.",
     "Backup password" to "Contraseña de la copia",
     "Change backup password" to "Cambiar la contraseña de la copia",
     "Backups will need this password to open, also on a new phone. If you forget it, they can't be opened." to "Las copias van a pedir esta contraseña para abrirse, también en un teléfono nuevo. Si la olvidás, no se pueden abrir.",
@@ -58,7 +122,7 @@ val ES: Map<String, String> = mapOf(
     "Search" to "Buscar",
     "Search all your lists" to "Buscar en todas tus listas",
     "Nothing matches “{q}”" to "Nada coincide con “{q}”",
-    "Clear" to "Borrar",
+    "Clear" to "Limpiar", // not "Borrar": that is Delete (U-T24)
     "Starred" to "Destacadas",
     "Star" to "Destacar",
     "Nothing starred" to "Nada destacado",
@@ -343,129 +407,8 @@ val ES: Map<String, String> = mapOf(
     "Quit" to "Salir",
     "Add an image" to "Agregar una imagen",
     "Restore from a backup file" to "Restaurar desde un archivo de copia",
-    // budgets (Ciclo)
-    "Envelopes" to "Ciclo",
-    "Activity" to "Movimientos",
-    "Accounts" to "Cuentas",
-    "Month" to "Mes",
-    "Adds up" to "Cierra",
-    "Amount" to "Monto",
-    "Amount a month" to "Monto por mes",
-    "Amount a year" to "Monto por año",
-    "Available" to "Disponible",
-    "Bank" to "Banco",
-    "Bills" to "Cuentas a pagar",
-    "Budgets" to "Presupuestos",
-    "By (year-month-day)" to "Para (año-mes-día)",
-    "Card" to "Tarjeta",
-    "Cash" to "Efectivo",
-    "Changed" to "Cambiado",
-    "Currency symbol" to "Símbolo de moneda",
-    "Date (year-month-day)" to "Fecha (año-mes-día)",
-    "Delete budget" to "Borrar presupuesto",
-    "Delete envelope" to "Borrar sobre",
-    "Deleted" to "Borrado",
-    "Edit" to "Editar",
-    "Edit account" to "Editar cuenta",
-    "Edit envelope" to "Editar sobre",
-    "Envelope" to "Sobre",
-    "Envelopes hold more than your accounts" to "Los ciclo tienen más que tus cuentas",
+    // words the shared core and Ciclo both use (the budget app's own words were removed, UX review U-C21)
     "Export CSV" to "Exportar CSV",
-    "Fill" to "Llenar",
-    "Fill envelopes" to "Llenar ciclo",
-    "Filled" to "Ciclo llenados",
-    "For a card, enter what you owe as a negative amount." to "En una tarjeta, poné lo que debés como monto negativo.",
-    "From" to "De",
-    "Fun" to "Gustos",
-    "Give your money jobs: tap Fill" to "Dale un destino a tu plata: tocá Llenar",
-    "Goal" to "Meta",
-    "Goal amount" to "Monto de la meta",
-    "Got" to "Recibido",
-    "Got money" to "Recibí",
-    "Groceries" to "Supermercado",
-    "Heading (optional)" to "Título (opcional)",
-    "How much is in it today?" to "¿Cuánto hay hoy?",
-    "How much is in your bank account today?" to "¿Cuánto hay hoy en tu cuenta del banco?",
-    "Including the {x} you just got" to "Con los {x} que acabás de recibir",
-    "Into" to "A la cuenta",
-    "Join a shared budget" to "Unirse a un presupuesto compartido",
-    "Left in Available" to "Queda disponible",
-    "Monthly" to "Mensual",
-    "Monthly amount" to "Monto mensual",
-    "Move" to "Mover",
-    "Move money" to "Mover plata",
-    "Moved" to "Movido",
-    "My budget" to "Mi presupuesto",
-    "New account" to "Cuenta nueva",
-    "New budget" to "Presupuesto nuevo",
-    "New envelope" to "Sobre nuevo",
-    "Next month" to "Mes siguiente",
     "Note" to "Nota",
-    "Nothing spent this month." to "Nada gastado este mes.",
-    "Nothing yet. What you spend and get shows up here." to "Todavía nada. Lo que gastás y recibís aparece acá.",
-    "On track · {x} ahead" to "Vas bien · {x} de margen",
-    "One envelope" to "Un solo sobre",
-    "Paid from" to "Pagado con",
-    "Please update to keep using shared budgets: {v}" to "Actualizá para seguir usando presupuestos compartidos: {v}",
-    "Previous month" to "Mes anterior",
-    "Put it in envelopes now" to "Repartirlo en ciclo ahora",
-    "Refund (money back)" to "Devolución (te devuelven plata)",
-    "Rename budget" to "Cambiar nombre del presupuesto",
-    "Saved" to "Guardado",
-    "Once" to "Una vez",
-    "Every week" to "Cada semana",
-    "Every 2 weeks" to "Cada 2 semanas",
-    "Every month" to "Cada mes",
-    "Every year" to "Cada año",
-    "Repeating" to "Se repiten",
-    "next {date}" to "próximo {date}",
-    "Stop repeating" to "Dejar de repetir",
-    "Stopped repeating" to "Ya no se repite",
-    "Remove all" to "Quitar todo",
-    "Removed {n} entries" to "Se quitaron {n} movimientos",
-    "A repeat can start at most a year back" to "Una repetición puede empezar como mucho un año atrás",
-    "edited by {name}" to "editado por {name}",
-    "{n} entries could not be read (made by a different app) and count nowhere" to "{n} movimientos no se pudieron leer (los hizo otra app) y no cuentan en ningún lado",
-    "Changes apply from {date} on" to "Los cambios valen desde el {date}",
-    "Reconcile with a statement" to "Conciliar con un resumen",
-    "Reconcile {name}" to "Conciliar {name}",
-    "Reconciled {name}" to "{name} conciliada",
-    "{n} entries" to "{n} movimientos",
-    "reconciled {date}" to "conciliada {date}",
-    "Reconciled" to "Conciliado",
-    "Cleared" to "Confirmado",
-    "Last statement: {date}, {amount}" to "Último resumen: {date}, {amount}",
-    "Statement date" to "Fecha del resumen",
-    "Ending balance" to "Saldo final",
-    "Tick each entry your statement shows." to "Marcá cada movimiento que aparece en el resumen.",
-    "No entries to tick." to "No hay movimientos para marcar.",
-    "Add a missing entry" to "Agregar uno que falta",
-    "Cleared balance" to "Saldo confirmado",
-    "Difference" to "Diferencia",
-    "Matches the statement" to "Coincide con el resumen",
-    "Finish" to "Terminar",
-    "Later" to "Después",
-    "Set aside {x} a month" to "Apartá {x} por mes",
-    "Spent" to "Gasté",
-    "Spent…" to "Gasté…",
-    "Split" to "Dividir",
-    "Start" to "Empezar",
-    "This changes Available by the same amount." to "Esto cambia Disponible en el mismo monto.",
-    "To" to "A",
-    "Top up" to "Completar",
-    "Total" to "Total",
-    "Transfer" to "Transferir",
-    "What for" to "En qué",
-    "Yearly" to "Anual",
-    "goal {x}" to "meta {x}",
-    "goal {x} by {date}" to "meta {x} para {date}",
-    "has {x}" to "tiene {x}",
-    "of {x} a month" to "de {x} por mes",
-    "of {x} a year" to "de {x} por año",
-    "{a} to {b}" to "{a} a {b}",
-    "{name} · {x} left" to "{name} · quedan {x}",
-    "{x} behind" to "{x} atrasado",
-    "{x} still to split" to "faltan repartir {x}",
     "Open Ciclo" to "Abrir Ciclo",
-    "This phone is stopping Ciclo from syncing in the background, so shared budgets only update while the app is open. To fix it, allow background activity for Ciclo in its battery settings." to "Este teléfono no deja que Ciclo se sincronice en segundo plano, así que los presupuestos compartidos solo se actualizan con la app abierta. Para arreglarlo, permití la actividad en segundo plano para Ciclo en la configuración de batería.",
 )

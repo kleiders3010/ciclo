@@ -40,6 +40,7 @@ fun openNode(backup: ByteArray? = null, password: String? = null): KtNode {
     val bind = System.getProperty("kt.bind", "")
     // Daily sealed backup (the folder choice prompt comes with the polished UI, DESIGN §11).
     val backups = System.getProperty("kt.backups") ?: File(base, "backups").absolutePath
+    com.jurisgames.ciclo.ui.BackupInfo.folder = backups // named in Settings (U-C12)
     val name = System.getProperty("kt.deviceName") ?: System.getenv("COMPUTERNAME") ?: runCatching { java.net.InetAddress.getLocalHost().hostName }.getOrDefault("")
     val options = NodeOptions(Platform.DESKTOP, relays, p2p, p2p, bind, name, backups)
     return if (backup == null) KtNode.open(identity.absolutePath, data.absolutePath, worker, options)
@@ -73,7 +74,7 @@ private object TrayIcon : Painter() {
  */
 /** This build's version code (the update manifest compares against it): the same number as the Android build
  * (app/android/build.gradle.kts versionCode), checked by VersionCodeTest. */
-const val VERSION_CODE = 3uL
+const val VERSION_CODE = 1uL
 
 fun main(args: Array<String>) {
     // Packaged app: the Rust library and the import worker ship in its resources folder.
@@ -148,7 +149,7 @@ fun main(args: Array<String>) {
                 val channel = if (System.getProperty("os.name").lowercase().contains("win")) "windows" else "linux"
                 runCatching { node.requiredUpdate(VERSION_CODE, channel) }.getOrNull()
             }
-            CicloApp(node, required = required, decodeImage = Images::decode, onPickImage = { done ->
+            CicloApp(node, required = required, decodeImage = Images::decode, onPrint = ::printPage, onPickImage = { done ->
                 val dialog = FileDialog(null as Frame?, tr("Add an image"), FileDialog.LOAD).apply {
                     setFilenameFilter { _, name -> name.lowercase().substringAfterLast('.') in setOf("jpg", "jpeg", "png", "gif", "bmp", "webp") }
                     isVisible = true
@@ -160,7 +161,7 @@ fun main(args: Array<String>) {
                 // Desktop: onto the clipboard, ready to paste into any chat.
                 java.awt.Toolkit.getDefaultToolkit().systemClipboard.setContents(java.awt.datatransfer.StringSelection(link), null)
             }, onRestore = {
-                val dialog = FileDialog(null as Frame?, tr("Restore from a backup file"), FileDialog.LOAD).apply { isVisible = true }
+                val dialog = FileDialog(null as Frame?, tr("Restore from a backup"), FileDialog.LOAD).apply { isVisible = true }
                 val file = dialog.file?.let { File(dialog.directory, it) }
                 if (file != null) {
                     val bytes = file.readBytes()
@@ -171,7 +172,11 @@ fun main(args: Array<String>) {
             }, onRestoreWith = { bytes, pw -> restoreInto(bytes, pw) }, onExport = { l ->
                 // The activity as a spreadsheet file (one line per envelope part).
                 val dialog = FileDialog(null as Frame?, tr("Export {name}", "name" to l.name), FileDialog.SAVE).apply { file = "${com.jurisgames.ciclo.core.exportFileStem(l.name)}.csv"; isVisible = true }
-                dialog.file?.let { File(dialog.directory, it) }?.writeText(node.exportCsv(l.id))
+                dialog.file?.let { File(dialog.directory, it) }?.writeText(node.exportCsv(l.id, com.jurisgames.ciclo.ui.Words.tagLabels()))
+            }, onSaveBackup = {
+                // U-C12: the whole journal in one file, the format Restore reads (locked with the backup password if set)
+                val dialog = FileDialog(null as Frame?, tr("Save a backup file"), FileDialog.SAVE).apply { file = "Ciclo-${java.time.LocalDate.now()}.ktbackup"; isVisible = true }
+                dialog.file?.let { File(dialog.directory, it) }?.let { f -> runCatching { node.writeBackup(f.path) } }
             })
         }
     }

@@ -6,6 +6,7 @@ import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import com.jurisgames.ciclo.core.KtNode
 import com.jurisgames.ciclo.core.NodeOptions
 import com.jurisgames.ciclo.core.Platform
@@ -28,11 +29,12 @@ class DesktopDiagnosticsTest {
         val options = NodeOptions(Platform.DESKTOP, listOf("ws://127.0.0.1:9"), false, false, "127.0.0.1:0", "", "")
         val n = KtNode.open(File(home, "identity").path, File(home, "data").path, System.getProperty("kt.worker"), options)
         val list = n.createList(null, "Secret plans")
-        n.setEnvelope(list.id, null, "very private task", 100, "m", null, "")
+        n.cycleSetNote(list.id, "2026-11-20", "very private task")
         n.syncNow()
         rule.setContent { CicloApp(n) }
         rule.onNodeWithTag("settingsOpen").performClick()
         rule.waitUntil(5_000) { shown("version") }
+        rule.onNodeWithTag("version").performScrollTo() // the settings scroll: a tap off-screen would close the dialog
         repeat(6) { rule.onNodeWithTag("version").performClick() }
         check(!shown("diagnostics")) { "hidden until the seventh tap" }
         rule.onNodeWithTag("version").performClick()

@@ -14,8 +14,8 @@ android {
         applicationId = "com.jurisgames.ciclo"
         minSdk = 26
         targetSdk = 36
-        versionCode = 4
-        versionName = "1.0.3"
+        versionCode = 1
+        versionName = "1.0.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         manifestPlaceholders["appLabel"] = "@string/app_name"
         // The Rust core is built for these only (scripts/build-android-libs.sh); JNA's

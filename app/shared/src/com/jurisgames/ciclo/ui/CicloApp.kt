@@ -10,8 +10,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
@@ -79,9 +81,9 @@ import kotlinx.coroutines.launch
 import java.io.File
 
 /**
- * The app: the last budget used, its envelopes, ready to record a purchase (docs/UI-SPEC.md).
- * Every "list" of the shared core is a budget. Budgets are a sidebar on wide screens and chips
- * on phones; everything else is in the budget's ⋮ menu or the ☰ menu.
+ * The app: your cycle journal (Today, Calendar, Insights), partners' summaries as chips above it.
+ * Every "list" of the shared core is a journal or a partner summary. The ☰ menu is a sidebar on wide
+ * screens; the journal's own actions are in its ⋮ menu.
  */
 @Composable
 fun CicloApp(
@@ -107,6 +109,9 @@ fun CicloApp(
     onPrint: ((String, String) -> Unit)? = null,
     /** Restore a password-locked backup (its bytes, the checked password). */
     onRestoreWith: ((ByteArray, String) -> Unit)? = null,
+    /** Write the whole journal to a backup file she picks, the format Restore reads (UX review U-C12). */
+    onSaveBackup: (() -> Unit)? = null,
+    backHandler: (@Composable (Boolean, () -> Unit) -> Unit)? = null,
 ) {
     // Bumped whenever the node reports a change (another device, membership, compaction).
     var version by remember { mutableIntStateOf(0) }
@@ -124,7 +129,7 @@ fun CicloApp(
             Surface(Modifier.fillMaxSize()) {
                 // While a locked backup is restored the old node gets closed: nothing on screen may still read it.
                 if (restoring == null) Home(
-                    Env(node, version, { version++ }, onRestore, onExport, onShare, onSettings, onScan, onImport, update, onUpdate, onPickImage, required, onPrint),
+                    Env(node, version, { version++ }, onRestore, onExport, onShare, onSettings, onScan, onImport, update, onUpdate, onPickImage, required, onPrint, onSaveBackup, backHandler = backHandler),
                     openedCode,
                 )
                 // A locked backup waits for its password (picked, or restored by Android onto this phone).
@@ -160,52 +165,36 @@ class Env(
     val onPickImage: ((onPicked: (ByteArray) -> Unit) -> Unit)?,
     val required: String?,
     val onPrint: ((String, String) -> Unit)? = null,
+    val onSaveBackup: (() -> Unit)? = null,
+    /** Android's Back inside the app (a screen or tab steps back before the app closes; QR U-Q1 / Tasks U-T18). */
+    val backHandler: (@Composable (Boolean, () -> Unit) -> Unit)? = null,
 )
 
 /** The list shown last, per device (a plain file next to the app's data). */
 private fun lastListFile(node: KtNode) = File(node.dataDir(), "ui-last-list")
 
-private enum class Dialog { Settings, Join, LinkThis, LinkCode, NewList, Rename, Style, Undo, Feedback }
+private enum class Dialog { Settings, Join, LinkThis, LinkCode, Feedback, CycleSettings, Partner }
+
+/** A journal this device keeps (not a partner's summary it was invited to). */
+fun ownJournal(node: KtNode, lists: List<ListItem>): ListItem? =
+    lists.firstOrNull { l -> runCatching { !node.partnerIsView(l.id) }.getOrDefault(true) }
 
 @Composable
 private fun Home(env: Env, openedCode: String?) {
     val node = env.node
     val scope = rememberCoroutineScope()
     val snackbar = remember { SnackbarHostState() }
-    // by name only: sharing a budget moves it into a group of its own, and that must not move its tab
-    val lists = remember(node, env.version) { node.lists().sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.name }) }
-    var currentId by remember { mutableStateOf(runCatching { lastListFile(node).readText().trim() }.getOrDefault("")) }
-    val current = lists.find { it.id == currentId } ?: lists.firstOrNull()
-    fun open(l: ListItem) {
-        currentId = l.id
-        runCatching { lastListFile(node).writeText(l.id) }
-    }
+    val lists = remember(node, env.version) { node.lists() }
+    val current = ownJournal(node, lists)
+    val partners = lists.filter { it.id != current?.id && runCatching { node.partnerIsView(it.id) }.getOrDefault(false) }
     val opened = openedCode?.takeIf { it.isNotBlank() }
     var dialog by remember(opened) {
         mutableStateOf(if (opened == null) null else if (opened.contains("/link")) Dialog.LinkThis else Dialog.Join)
     }
-    var invite by remember { mutableStateOf<Pair<String, InviteInfo>?>(null) }
-
-    fun share(l: ListItem) {
-        runCatching {
-            val shared = node.shareList(l.id)
-            open(shared)
-            env.changed()
-            invite = shared.name to node.invite(shared.groupId, 30u)
-        }.onFailure { e -> scope.launch { snackbar.showSnackbar(e.message ?: tr("Couldn't share")) } }
-    }
-
-    fun deleteList(l: ListItem) {
-        runCatching { node.deleteList(l.id) }
-        env.changed()
-        scope.launch {
-            val r = snackbar.showSnackbar(tr("Deleted {name}", "name" to l.name), actionLabel = tr("Undo"), duration = SnackbarDuration.Long)
-            if (r == SnackbarResult.ActionPerformed) {
-                runCatching { node.restoreList(l.groupId, l.id) }
-                open(l)
-                env.changed()
-            }
-        }
+    var showPartner by remember { mutableStateOf<ListItem?>(null) }
+    // the partner's summary is written from the journal whenever it changes (only what was chosen to share)
+    androidx.compose.runtime.LaunchedEffect(node, env.version, current?.id) {
+        current?.let { j -> runCatching { node.partnerPublish(j.id, today()) } }
     }
 
     val menu = MenuActions(
@@ -215,42 +204,40 @@ private fun Home(env: Env, openedCode: String?) {
         settings = { dialog = Dialog.Settings },
         feedback = { dialog = Dialog.Feedback },
     )
-    val listMenu = ListActions(
-        share = { current?.let(::share) },
-        rename = { dialog = Dialog.Rename },
-        style = { dialog = Dialog.Style },
-        undo = { dialog = Dialog.Undo },
-        delete = { current?.let(::deleteList) },
-    )
 
+    // U-C25: Ctrl+T logs today, Ctrl+, opens Settings
     val keys = Modifier.onPreviewKeyEvent { e ->
         if (e.type != KeyEventType.KeyDown || !e.isCtrlPressed) return@onPreviewKeyEvent false
-        val digits = listOf(Key.One, Key.Two, Key.Three, Key.Four, Key.Five, Key.Six, Key.Seven, Key.Eight, Key.Nine)
-        val i = digits.indexOf(e.key)
-        if (i < 0) return@onPreviewKeyEvent false
-        lists.getOrNull(i)?.let(::open)
-        true
+        when (e.key) {
+            Key.T -> { if (current != null && dialog == null) KeyActions.logToday.intValue++; current != null }
+            Key.Comma -> { dialog = Dialog.Settings; true }
+            else -> false
+        }
     }
-
     BoxWithConstraints(Modifier.fillMaxSize().then(keys)) {
         val wide = maxWidth >= 720.dp
+        @Composable
+        fun Body(onMenu: (() -> Unit)?) {
+            Banners(env)
+            if (partners.isNotEmpty() && current != null) {
+                Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(horizontal = 12.dp, vertical = 4.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    for (p in partners) FilterChip(false, { showPartner = p }, label = { Text(p.name, maxLines = 1) }, modifier = Modifier.testTag("partnerView-" + p.name))
+                }
+            }
+            if (current != null) CyclePane(env, current, onMenu, snackbar, onSettings = { dialog = Dialog.CycleSettings }, onPartner = { dialog = Dialog.Partner })
+            // a device that only sees partners' summaries: the summaries are the home screen (UX review U-C1)
+            else if (partners.isNotEmpty()) PartnerHome(env, partners, onMenu, onJoin = menu.join)
+            else FirstJournal(env, onLinkThis = menu.linkThis, onJoin = menu.join, onMenu = onMenu)
+        }
         if (wide) {
-            Scaffold(snackbarHost = { SnackbarHost(snackbar, Modifier.padding(bottom = if (current != null) 64.dp else 0.dp)) }) { pad ->
+            Scaffold(snackbarHost = { SnackbarHost(snackbar) }) { pad ->
                 Row(Modifier.fillMaxSize().padding(pad).consumeWindowInsets(pad).imePadding()) {
-                    Column(Modifier.width(280.dp).fillMaxHeight().background(MaterialTheme.colorScheme.surfaceContainer)) {
-                        Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(vertical = 12.dp)) {
-                            Text(tr("Budgets"), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp))
-                            for (l in lists) SidebarRow(l, l.id == current?.id) { open(l) }
-                            SidebarRow(null, false, tr("New budget")) { dialog = Dialog.NewList }
-                        }
-                        HorizontalDivider()
-                        MenuPanel(env, menu, compact = true)
+                    Column(Modifier.width(280.dp).fillMaxHeight().background(MaterialTheme.colorScheme.surfaceContainer).verticalScroll(rememberScrollState())) {
+                        MenuPanel(env, menu, compact = false)
                     }
                     VerticalDivider()
-                    Column(Modifier.weight(1f).fillMaxHeight()) {
-                        Banners(env)
-                        if (current != null) BudgetPane(env, current, onMenu = null, listMenu = listMenu, snackbar = snackbar)
-                        else FirstBudget(env, onLinkThis = menu.linkThis, onMenu = null, open = ::open)
+                    Box(Modifier.weight(1f).fillMaxHeight(), contentAlignment = Alignment.TopCenter) {
+                        Column(Modifier.widthIn(max = 640.dp).fillMaxHeight()) { Body(null) }
                     }
                 }
             }
@@ -267,17 +254,8 @@ private fun Home(env: Env, openedCode: String?) {
                     ), compact = false)
                 }
             }) {
-                Scaffold(snackbarHost = { SnackbarHost(snackbar, Modifier.padding(bottom = if (current != null) 64.dp else 0.dp)) }) { pad ->
-                    Column(Modifier.fillMaxSize().padding(pad).consumeWindowInsets(pad).imePadding()) {
-                        Banners(env)
-                        if (current != null) {
-                            BudgetPane(env, current, onMenu = { scope.launch { drawer.open() } }, listMenu = listMenu, snackbar = snackbar) {
-                                if (lists.size > 1) BudgetChips(lists, current, ::open) { dialog = Dialog.NewList }
-                            }
-                        } else {
-                            FirstBudget(env, onLinkThis = menu.linkThis, onMenu = { scope.launch { drawer.open() } }, open = ::open)
-                        }
-                    }
+                Scaffold(snackbarHost = { SnackbarHost(snackbar) }) { pad ->
+                    Column(Modifier.fillMaxSize().padding(pad).consumeWindowInsets(pad).imePadding()) { Body { scope.launch { drawer.open() } } }
                 }
             }
         }
@@ -285,49 +263,49 @@ private fun Home(env: Env, openedCode: String?) {
 
     when (dialog) {
         Dialog.Settings -> SettingsDialog(node, onSaved = { env.onSettings?.invoke(it); env.changed() }, onClose = { dialog = null })
-        Dialog.Join -> JoinDialog(env, opened?.takeIf { !it.contains("/link") }, onJoined = { name ->
-            node.lists().lastOrNull { it.groupName == name }?.let(::open)
-        }, onClose = { dialog = null })
-        // A device link never comes prefilled from a link: linking hands over every budget, so the code is typed or
+        Dialog.Join -> JoinDialog(env, opened?.takeIf { !it.contains("/link") }, onJoined = { env.changed() }, onClose = { dialog = null })
+        // A device link never comes prefilled from a link: linking hands over the journal, so the code is typed or
         // scanned here, from the other device's own screen (safety audit round 4, T6).
         Dialog.LinkThis -> LinkThisDialog(env, opened?.contains("/link") == true, scope) { dialog = null }
         Dialog.LinkCode -> runCatching { node.linkCode() }.getOrNull()?.let { info ->
-            CodeDialog(tr("Link a device"), tr("On your other device, open ☰ › Link this device, then enter this code or scan it."), info, env.onShare) { dialog = null }
+            CodeDialog(tr("Link another device"), tr("On your other device, open ☰ › Link to my other device, then enter this code or scan it."), info, env.onShare) { dialog = null }
         }
-        Dialog.NewList -> NewListDialog(env, onCreated = { open(it); dialog = null }, onClose = { dialog = null })
-        Dialog.Rename -> current?.let { l -> RenameDialog(l.name, onDone = { n -> runCatching { node.renameList(l.id, n) }; env.changed(); dialog = null }, onClose = { dialog = null }) }
-        Dialog.Style -> current?.let { l -> StyleDialog(node, l, onDone = env.changed, onClose = { dialog = null }) }
-        Dialog.Undo -> current?.let { l -> UndoDialog(node, l, onDone = env.changed, onClose = { dialog = null }) }
         Dialog.Feedback -> FeedbackDialog(node, onSent = { dialog = null; scope.launch { snackbar.showSnackbar(tr("Thanks! Your message was sent.")) } }, onClose = { dialog = null })
+        Dialog.CycleSettings -> current?.let { CycleSettingsDialog(env, it) { dialog = null } }
+        Dialog.Partner -> current?.let { PartnerDialog(env, it, onShare = env.onShare, onClose = { dialog = null }) }
         null -> {}
     }
-    invite?.let { (name, info) -> CodeDialog(tr("Invite to {name}", "name" to name), tr("Anyone with this link or code can open this budget and join, until it expires. Share it only with the people you invite."), info, env.onShare) { invite = null } }
+    showPartner?.let { p -> PartnerViewDialog(env, p) { showPartner = null } }
+}
+
+/** Desktop keys that reach into a screen (UX review U-C25): bumped by the window's key handler. */
+object KeyActions {
+    val logToday = androidx.compose.runtime.mutableIntStateOf(0)
 }
 
 class MenuActions(val join: () -> Unit, val linkThis: () -> Unit, val linkCode: () -> Unit, val settings: () -> Unit, val feedback: () -> Unit)
-class ListActions(val share: () -> Unit, val rename: () -> Unit, val style: () -> Unit, val undo: () -> Unit, val delete: () -> Unit)
 
+/** The first screen: Ciclo starts with an empty journal, or this device joins your other one. */
 @Composable
-private fun SidebarRow(l: ListItem?, selected: Boolean, label: String? = null, onClick: () -> Unit) {
-    val bg = if (selected) MaterialTheme.colorScheme.secondaryContainer else androidx.compose.ui.graphics.Color.Transparent
-    Row(
-        Modifier.fillMaxWidth().padding(horizontal = 8.dp).background(bg, RoundedCornerShape(24.dp)).clickable(onClick = onClick)
-            .padding(horizontal = 12.dp, vertical = 10.dp).testTag(if (l != null) "list-" + l.name else "newList"),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        if (l != null) ListBadge(l, Modifier.padding(end = 10.dp)) else Icon(Ic.Add, null, Modifier.padding(end = 10.dp).size(18.dp))
-        Text(l?.name ?: label.orEmpty(), maxLines = 1, overflow = TextOverflow.Ellipsis, fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal)
+fun FirstJournal(env: Env, onLinkThis: () -> Unit, onJoin: () -> Unit, onMenu: (() -> Unit)?) {
+    fun start() {
+        val node = env.node
+        runCatching { node.createList(null, tr("My cycle")) }.getOrNull() ?: return
+        env.changed()
     }
-}
-
-/** The other budgets, as chips under the title (phones, when there is more than one). */
-@Composable
-private fun BudgetChips(lists: List<ListItem>, current: ListItem?, open: (ListItem) -> Unit, newList: () -> Unit) {
-    Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(horizontal = 12.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        for (l in lists) {
-            FilterChip(l.id == current?.id, { open(l) }, label = { Text(l.name, maxLines = 1) }, leadingIcon = { ListBadge(l) }, modifier = Modifier.testTag("list-" + l.name))
+    Column(Modifier.fillMaxSize()) {
+        Row(Modifier.fillMaxWidth().padding(start = 4.dp, top = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+            if (onMenu != null) IconButton(onClick = onMenu, modifier = Modifier.testTag("menu")) { Icon(Ic.Menu, tr("Menu")) } else Spacer(Modifier.width(16.dp))
+            Text("Ciclo", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold, modifier = Modifier.testTag("title"))
         }
-        FilterChip(false, newList, label = { Text(tr("New budget")) }, leadingIcon = { Icon(Ic.Add, null, Modifier.size(18.dp)) }, modifier = Modifier.testTag("newList"))
+        Column(Modifier.weight(1f).padding(24.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            Text(tr("Your period, cycle and how you feel. It stays on your own devices."), style = MaterialTheme.typography.titleMedium)
+            Text(tr("No account and no ads. Everything is free. A partner sees only what you choose. Backups are encrypted so no server can read them."), style = MaterialTheme.typography.bodyMedium)
+            // a partner who was told "install Ciclo" lands here too: the invite is a first-screen choice (UX review U-C1)
+            androidx.compose.material3.Button(onClick = ::start, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("firstStart")) { Text(tr("Track my cycle")) }
+            androidx.compose.material3.OutlinedButton(onClick = onJoin, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("firstJoin")) { Text(tr("I got a partner's invite")) }
+            TextButton(onClick = onLinkThis, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("firstLink")) { Text(tr("Link to my own other phone or computer")) }
+        }
     }
 }
 
@@ -345,14 +323,16 @@ private fun MenuPanel(env: Env, a: MenuActions, compact: Boolean) {
             label = { Text(tr("Your name")) }, singleLine = true,
             modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp).testTag("name"),
         )
-        MenuRow(tr("Join a shared budget"), "join", a.join)
+        MenuRow(tr("Open a partner's invite"), "join", a.join)
         if (isLinking) {
             Text(tr("Linking: this device joins your other one as soon as it's online"), style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(horizontal = 20.dp, vertical = 6.dp).testTag("linkingStatus"))
         } else {
-            MenuRow(if (devices.size > 1) tr("Your devices ({n}) · Add a device", "n" to devices.size) else tr("Add a device"), "linkDevice", a.linkCode)
-            if (devices.size <= 1) MenuRow(tr("Join your other device"), "linkThis", a.linkThis)
+            MenuRow(if (devices.size > 1) tr("Your devices ({n}) · Link another device", "n" to devices.size) else tr("Link another device"), "linkDevice", a.linkCode)
+            if (devices.size <= 1) MenuRow(tr("Link to my other device"), "linkThis", a.linkThis)
         }
-        if (env.onRestore != null && remember(node, env.version) { node.isPristine() }) MenuRow(tr("Restore from a backup"), "restore", env.onRestore)
+        val pristine = remember(node, env.version) { node.isPristine() }
+        if (env.onSaveBackup != null && !pristine) MenuRow(tr("Save a backup file"), "saveBackup", env.onSaveBackup)
+        if (env.onRestore != null && pristine) MenuRow(tr("Restore from a backup"), "restore", env.onRestore)
         MenuRow(tr("Settings"), "settingsOpen", a.settings)
         // in the menu itself, not only inside Settings (Kleider, 2026-11-21: "Make sure users always have an easy way to give feedback or report bugs on ALL our apps")
         MenuRow(tr("Send feedback"), "feedbackMenu", a.feedback)
@@ -377,7 +357,7 @@ private fun Banners(env: Env) {
     }
     val update = env.update
     if (env.required != null) {
-        Banner(tr("Please update to keep using shared budgets: {v}", "v" to env.required), "required", *listOfNotNull(env.onUpdate?.let { u -> tr("Update") to { u(update?.link ?: "https://apps.jurisgames.com/") } }).toTypedArray())
+        Banner(tr("Please update to keep sharing with a partner: {v}", "v" to env.required), "required", *listOfNotNull(env.onUpdate?.let { u -> tr("Update") to { u(update?.link ?: "https://apps.jurisgames.com/") } }).toTypedArray())
     } else if (update != null && env.onUpdate != null) {
         val why = if (node.newerVersionSeen()) tr("A newer version is available to use certain features") else tr("Version {v} is available", "v" to update.versionName)
         Banner(why, "update", tr("Update") to { env.onUpdate.invoke(update.link) })
@@ -385,62 +365,34 @@ private fun Banners(env: Env) {
     for (l in remember(node, env.version) { node.recentLinks() }) {
         Banner(tr("New device linked: {name}", "name" to l.name.ifEmpty { tr("a device") }), "recentLink", tr("Undo") to { node.unlinkDevice(l.deviceId); env.changed() })
     }
+    // A device an invite let in, shown to every member with an undo (second-pass audit T2-13, rule 17).
+    for (j in remember(node, env.version) { runCatching { node.recentJoins() }.getOrDefault(emptyList()) }) {
+        val who = j.name.ifEmpty { tr("A new device") }
+        Banner(
+            if (j.by.isNotEmpty()) tr("{who} joined {list}, let in by {by}'s invite", "who" to who, "list" to j.listName, "by" to j.by) else tr("{who} joined {list}", "who" to who, "list" to j.listName),
+            "recentJoin",
+            tr("Remove") to { runCatching { node.removeJoined(j.groupId, j.deviceId) }; env.changed() },
+            tr("OK") to { runCatching { node.dismissJoin(j.groupId, j.deviceId) }; env.changed() },
+        )
+    }
     node.restored()?.let { r ->
         Banner(
-            tr("Restored from a backup: {n} of your lists are back", "n" to r.rehomedLists) + if (r.rejoiningGroups > 0u) tr("; shared lists open for editing once someone in them is online") else "",
+            tr("Restored from a backup: your journal is back") + if (r.rejoiningGroups > 0u) tr("; sharing with your partner picks up again once their phone is online") else "",
             "restoredInfo",
         )
     }
     val old = remember(node, env.version) { node.replacedDeviceGroups() }
     if (old > 0u) {
         Banner(
-            (if (old == 1u) tr("Your previous device can still see {n} shared list. Lost or stolen?", "n" to old) else tr("Your previous device can still see {n} shared lists. Lost or stolen?", "n" to old)), "oldDevice",
+            tr("Your previous device can still see what you share. Lost or stolen?"), "oldDevice",
             tr("Remove it") to { node.removeReplacedDevice(); env.changed() }, tr("Keep it") to { node.keepReplacedDevice(); env.changed() },
         )
     }
 }
 
-@Composable
-private fun RenameDialog(name: String, onDone: (String) -> Unit, onClose: () -> Unit) {
-    var text by remember { mutableStateOf(name) }
-    AlertDialog(
-        onDismissRequest = onClose,
-        confirmButton = { TextButton(onClick = { if (text.isNotBlank()) onDone(text.trim()) }, modifier = Modifier.testTag("renameGo")) { Text(tr("Rename")) } },
-        dismissButton = { TextButton(onClick = onClose) { Text(tr("Cancel")) } },
-        title = { Text(tr("Rename budget")) },
-        text = { OutlinedTextField(text, { text = it }, singleLine = true, modifier = Modifier.testTag("renameText")) },
-    )
-}
-
-@Composable
-private fun NewListDialog(env: Env, onCreated: (ListItem) -> Unit, onClose: () -> Unit) {
-    var name by remember { mutableStateOf("") }
-    fun create() {
-        if (name.isBlank()) return
-        val l = runCatching { env.node.createList(null, name.trim()) }.getOrNull() ?: return
-        runCatching { env.node.setListStyle(l.id, budgetHue(env.node.lists().size - 1), 1u, null) }
-        env.changed()
-        onCreated(l)
-    }
-    AlertDialog(
-        onDismissRequest = onClose,
-        confirmButton = { TextButton(onClick = ::create, modifier = Modifier.testTag("newListGo")) { Text(tr("Create")) } },
-        dismissButton = { TextButton(onClick = onClose) { Text(tr("Cancel")) } },
-        title = { Text(tr("New budget")) },
-        text = {
-            OutlinedTextField(
-                name, { name = it }, singleLine = true, placeholder = { Text(tr("Name")) },
-                keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(imeAction = androidx.compose.ui.text.input.ImeAction.Done),
-                keyboardActions = androidx.compose.foundation.text.KeyboardActions(onDone = { create() }),
-                modifier = Modifier.testTag("newListName"),
-            )
-        },
-    )
-}
-
 /** An invite or link code: copy / share the link, the words with Copy, the QR code on request. */
 @Composable
-private fun CodeDialog(title: String, hint: String, info: InviteInfo, onShare: ((String) -> Unit)?, onClose: () -> Unit) {
+internal fun CodeDialog(title: String, hint: String, info: InviteInfo, onShare: ((String) -> Unit)?, onClose: () -> Unit) {
     val clip = androidx.compose.ui.platform.LocalClipboardManager.current
     var qr by remember { mutableStateOf(false) }
     var copied by remember { mutableStateOf("") }
@@ -487,15 +439,15 @@ private fun LinkThisDialog(env: Env, fromLink: Boolean, scope: CoroutineScope, o
                             val p = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) { node.linkPreview(words) }
                             // Fixed words say what is handed over; the other side's own name and summary are shown as
                             // theirs (in quotes), never as the app's wording.
-                            preview = tr("Linking gives that device everything: all the budgets on this device, and a place in every budget you share. Only go on if you made this code yourself on your other device.") +
+                            preview = tr("Linking gives that device everything: your whole journal and every summary you share. Only go on if you made this code yourself on your other device.") +
                                 "\n" + tr("It calls itself “{name}” ({summary})", "name" to p.accountName, "summary" to trSummary(p.summary)) + when (ownLists) {
                                 0 -> "."
-                                1 -> tr(". The list on this device is added to them.")
-                                else -> tr(". The {n} lists on this device are added to them.", "n" to ownLists)
+                                1 -> tr(". The journal on this device is added to them.")
+                                else -> tr(". The {n} journals and summaries on this device are added to them.", "n" to ownLists)
                             }
                             result = ""
                         } catch (e: Exception) {
-                            result = tr(e.message ?: tr("That code didn't work. Check it on your other device."))
+                            result = userError(e, tr("That code didn't work. Check it on your other device."))
                         }
                     }
                 }, modifier = Modifier.testTag("linkFind")) { Text(tr("Next")) }
@@ -507,14 +459,14 @@ private fun LinkThisDialog(env: Env, fromLink: Boolean, scope: CoroutineScope, o
                             env.changed()
                             tr("Linking: this device joins as soon as your other one is online")
                         } catch (e: Exception) {
-                            tr(e.message ?: tr("Couldn't link. Try again."))
+                            userError(e, tr("Couldn't link. Try again."))
                         }
                     }
                 }, modifier = Modifier.testTag("linkGo")) { Text(tr("Link")) }
             }
         },
         dismissButton = { TextButton(onClick = onClose) { Text(tr("Close")) } },
-        title = { Text(tr("Link this device")) },
+        title = { Text(tr("Link to my other device")) },
         text = {
             Column {
                 if (fromLink) Text(tr("For safety, a device is linked only with the code shown on your other device: type it or scan it here."), modifier = Modifier.testTag("linkFromLink"))

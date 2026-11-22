@@ -57,7 +57,7 @@ class DesktopLinkTest {
         rule.onNodeWithTag("linkFind").performClick()
         rule.waitUntil(30_000) { rule.onAllNodes(hasTestTag("linkPreview")).fetchSemanticsNodes().isNotEmpty() }
         // The other side's own words are shown as theirs, in quotes, next to fixed words of ours (safety audit round 4, T6).
-        rule.onNode(hasTestTag("linkPreview") and hasText("“Alex” (Pixel 7 · 1 list (Groceries))", substring = true)).assertExists()
+        rule.onNode(hasTestTag("linkPreview") and hasText("“Alex” (Pixel 7 · Groceries)", substring = true)).assertExists() // pinned: U-C7 shows journal names, never "1 list"
         rule.onNodeWithTag("linkGo").performClick()
         rule.waitUntil(30_000) { rule.onAllNodes(hasTestTag("linkResult") and hasText("Linking", substring = true)).fetchSemanticsNodes().isNotEmpty() }
         check(desk.isLinking())
@@ -72,8 +72,8 @@ class DesktopLinkTest {
         check(!desk.isLinking())
         check(desk.displayName() == "Alex")
         check(phone.recentLinks().single().name == "Alex's PC")
-        rule.waitUntil(10_000) { rule.onAllNodes(hasTestTag("list-Groceries")).fetchSemanticsNodes().isNotEmpty() }
-        rule.onNode(hasTestTag("linkDevice") and hasText("Your devices (2)", substring = true)).assertExists()
+        // Ciclo shows the cycle, not list tabs (the list-tab wait was a Sobres leftover): the menu shows both devices.
+        rule.waitUntil(10_000) { rule.onAllNodes(hasTestTag("linkDevice") and hasText("Your devices (2)", substring = true)).fetchSemanticsNodes().isNotEmpty() }
         check(desk.devices().map { it.name }.toSet() == setOf("Pixel 7", "Alex's PC"))
         phone.close()
         desk.close()
