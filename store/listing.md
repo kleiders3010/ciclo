@@ -68,7 +68,8 @@ Las predicciones son estimaciones con lo que anotás. No son un método anticonc
 
 ## Data safety
 - Collected only when the person sends feedback, all optional: **Email address**, **App info and performance >
-  Diagnostics**. Not shared with third parties; encrypted in transit; deletion on request. Nothing else is
+  Diagnostics**, **App activity > Other user-generated content** (the message). The same form as Sobres
+  (exported from Sobres's Console and imported, 2026-11-23). Not shared with third parties; encrypted in transit; deletion on request. Nothing else is
   collected: the journal (health data) never leaves the person's own devices except end-to-end encrypted.
 - Health apps declaration: menstrual and reproductive health tracking; data not collected by the developer.
 - Privacy policy: https://apps.jurisgames.com/privacy/
