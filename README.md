@@ -49,7 +49,7 @@ is worked out on the device from the days you logged (`crates/kt-tasks/src/cycle
 - Android: `scripts/build-android-libs.sh`, then `cd app && ./gradlew :android:assemblePlayRelease`
 - Desktop: `scripts/package-desktop.sh`
 
-## Feedback
+## Problems or ideas
 In the app: ☰ › Send feedback. If the app doesn't open at all, open an issue at
 https://github.com/kleiders3010/ciclo/issues or email hello@jurisgames.com.
 
