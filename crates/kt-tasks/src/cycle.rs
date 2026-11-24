@@ -33,7 +33,9 @@ pub const MAX_CUSTOM: usize = 200;
 pub const DEFAULT_CYCLE: i64 = 28;
 pub const DEFAULT_PERIOD: i64 = 5;
 pub const DEFAULT_LUTEAL: i64 = 14;
-/// Cycles shorter or longer than this are left out of the averages (most likely a period that wasn't logged).
+/// A "cycle" shorter than CYCLE_MIN is left out of the usual length (most likely one period logged twice); a long one
+/// counts (a skipped month is real). CYCLE_MAX bounds the settings' cycle length and the range that says when a
+/// period is late / cycles are irregular.
 pub const CYCLE_MIN: i64 = 15;
 pub const CYCLE_MAX: i64 = 60;
 /// How many recent cycles the averages use.
@@ -410,9 +412,20 @@ pub struct Stats {
 pub fn stats(all: &[Day], set: &Settings) -> Stats {
     let p = periods(all);
     let cycles: Vec<(String, i64)> = p.windows(2).map(|w| (w[0].start.clone(), n(&w[1].start) - n(&w[0].start))).collect();
+    // A long cycle is a real one (a skipped month: "sometimes it just doesn't come for a month", Kleider 2026-11-24),
+    // never assumed to be a period that wasn't logged: every recent cycle counts, and the usual length is their middle,
+    // so one long (or short) cycle doesn't move the prediction. Only a "cycle" under CYCLE_MIN (a period logged twice)
+    // is left out.
+    let mut recent: Vec<i64> = cycles.iter().map(|c| c.1).filter(|l| *l >= CYCLE_MIN).rev().take(RECENT).collect();
+    let learned = recent.len() >= 2;
+    recent.sort_unstable();
+    let avg_cycle = match recent.len() {
+        0 => set.cycle_len,
+        k if k % 2 == 1 => recent[k / 2],
+        k => ((recent[k / 2 - 1] + recent[k / 2]) as f64 / 2.0).round() as i64,
+    };
+    // shortest / longest (when a period counts as late, "irregular") keep to the usual range, as before
     let used: Vec<i64> = cycles.iter().map(|c| c.1).filter(|l| (CYCLE_MIN..=CYCLE_MAX).contains(l)).rev().take(RECENT).collect();
-    let learned = used.len() >= 2;
-    let avg_cycle = if used.is_empty() { set.cycle_len } else { (used.iter().sum::<i64>() as f64 / used.len() as f64).round() as i64 };
     // the last period may still be going on: it counts only once it is over
     let lens: Vec<i64> = p.iter().rev().take(RECENT).map(|x| x.days).filter(|d| (1..=12).contains(d)).collect();
     let avg_period = if lens.len() >= 2 { (lens.iter().sum::<i64>() as f64 / lens.len() as f64).round() as i64 } else { set.period_len };
@@ -874,6 +887,33 @@ mod tests {
         assert_eq!(st.avg_cycle, 29); // 28.5 rounds up
         assert_eq!(st.avg_period, 5);
         assert!(st.learned && !st.irregular);
+    }
+
+    /// Kleider, 2026-11-24 (his mom): "it should not automatically assume that you are not tracking just because you
+    /// skip a month; sometimes it just doesn't come for a month". A skipped month is a real cycle: it stays in the
+    /// list and is used, and one long cycle doesn't push the next prediction weeks out (the middle of the recent
+    /// cycles, not their plain average: 28 x5 + 56 gave 33 before).
+    #[test]
+    fn a_skipped_month_is_a_real_cycle_and_does_not_throw_off_the_prediction() {
+        let d = doc();
+        for s in ["2026-01-01", "2026-01-29", "2026-02-26", "2026-03-26", "2026-04-23", "2026-06-18", "2026-07-16"] {
+            period(&d, s, 5);
+        }
+        let all = days(&d);
+        let st = stats(&all, &settings(&d));
+        assert_eq!(st.cycles.iter().map(|c| c.1).collect::<Vec<_>>(), [28, 28, 28, 28, 56, 28]);
+        assert_eq!(st.avg_cycle, 28, "one skipped month leaves the usual cycle at 28");
+        let o = outlook(&all, &settings(&d), "2026-07-20");
+        assert_eq!(o.next[0].start, "2026-08-13", "the next one is expected 28 days after the last");
+        // two months without one (84 days): still counted, not dropped as "a period that wasn't logged"
+        let d = doc();
+        for s in ["2026-01-01", "2026-01-31", "2026-04-25", "2026-05-25"] {
+            period(&d, s, 5);
+        }
+        let st = stats(&days(&d), &settings(&d));
+        assert_eq!(st.cycles.iter().map(|c| c.1).collect::<Vec<_>>(), [30, 84, 30]);
+        assert_eq!(st.avg_cycle, 30);
+        assert!(st.learned);
     }
 
     #[test]

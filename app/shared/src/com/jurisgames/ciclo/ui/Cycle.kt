@@ -336,7 +336,7 @@ private fun TodayView(env: Env, list: ListItem, o: OutlookView, set: CycleSettin
                 if (set.mode != "pregnant" && o.lastStart.isEmpty()) androidx.compose.material3.Button(onClick = onPastPeriod,
                     modifier = Modifier.fillMaxWidth().padding(top = 8.dp).testTag("welcomePast")) { Text(tr("Add my last period")) }
                 if (set.mode != "pregnant" && o.lastStart.isNotEmpty()) Text(
-                    if (o.learned) tr("Estimated from your last cycles (average {n} days).", "n" to o.avgCycle) else tr("Estimated from a {n}-day cycle until you have logged two.", "n" to o.avgCycle),
+                    if (o.learned) tr("Estimated from your last cycles (usually {n} days).", "n" to o.avgCycle) else tr("Estimated from a {n}-day cycle until you have logged two.", "n" to o.avgCycle),
                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
@@ -776,7 +776,7 @@ fun patternText(p: PatternItem, custom: Map<String, String>): String {
 }
 
 fun howText(set: CycleSettings): String = tr(
-    "Your next period is the start of your last one plus your average cycle (the last 6 cycles; very short or very long ones are left out, as they are most likely a period that wasn't logged). Until two cycles are logged, the cycle length from Cycle settings is used. Ovulation is estimated {l} days before the next period, and the fertile window is the 5 days before it, that day and the day after. When your logs show ovulation (a temperature rise: three mornings above the six before, the third at least 0.2 °C higher; or a positive ovulation test), the next period is counted from there instead. Everything is worked out on this device from what you log.",
+    "Your next period is the start of your last one plus your usual cycle: the middle length of your last 6 cycles, so one very long cycle (sometimes a month goes by without a period) or a very short one doesn't throw it off. Until two cycles are logged, the cycle length from Cycle settings is used. Ovulation is estimated {l} days before the next period, and the fertile window is the 5 days before it, that day and the day after. When your logs show ovulation (a temperature rise: three mornings above the six before, the third at least 0.2 °C higher; or a positive ovulation test), the next period is counted from there instead. Everything is worked out on this device from what you log.",
     "l" to set.luteal,
 )
 
@@ -940,7 +940,7 @@ fun reportHtml(o: OutlookView, set: CycleSettings, days: List<CycleDay>, custom:
     sb.append("<html><head><meta charset=\"utf-8\"><style>body{font-family:sans-serif;font-size:12px}table{border-collapse:collapse}td,th{border:1px solid #999;padding:3px 6px;text-align:left}h1{font-size:18px}h2{font-size:14px;margin-top:16px}</style></head><body>")
     sb.append("<h1>").append(esc(tr("Cycle report"))).append("</h1><p>").append(esc(tr("Made on {date} by the Ciclo app from what was logged on this device.", "date" to today()))).append("</p>")
     sb.append("<h2>").append(esc(tr("Summary"))).append("</h2><ul>")
-    sb.append("<li>").append(esc(tr("Average cycle: {n} days", "n" to o.avgCycle))).append(if (o.learned) "" else esc(" (" + tr("from the settings") + ")")).append("</li>")
+    sb.append("<li>").append(esc(tr("Usual cycle: {n} days", "n" to o.avgCycle))).append(if (o.learned) "" else esc(" (" + tr("from the settings") + ")")).append("</li>")
     if (o.learned) sb.append("<li>").append(esc(tr("Shortest and longest recent cycle: {a} and {b} days", "a" to o.shortest, "b" to o.longest))).append("</li>")
     sb.append("<li>").append(esc(tr("Average period: {n} days", "n" to o.avgPeriod))).append("</li>")
     if (o.lastStart.isNotEmpty()) sb.append("<li>").append(esc(tr("Last period started: {date}", "date" to fullDate(o.lastStart)))).append("</li>")

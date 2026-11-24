@@ -94,7 +94,7 @@ val ES_CYCLE: Map<String, String> = mapOf(
     "Ovulation seen in your logs: {date}" to "Ovulación según lo que anotaste: {date}",
     "PMS days may start now" to "Pueden empezar los días de SPM",
     "Fertile window from {date} (estimated)" to "Ventana fértil desde el {date} (estimada)",
-    "Estimated from your last cycles (average {n} days)." to "Estimado con tus últimos ciclos (promedio de {n} días).",
+    "Estimated from your last cycles (usually {n} days)." to "Estimado con tus últimos ciclos (por lo general {n} días).",
     "Estimated from a {n}-day cycle until you have logged two." to "Estimado con un ciclo de {n} días hasta que anotes dos.",
     "Period today" to "Período hoy",
     "No flow" to "Sin sangrado",
@@ -146,8 +146,8 @@ val ES_CYCLE: Map<String, String> = mapOf(
     "{a} days before your period" to "{a} días antes de tu período",
     "{a}–{b} days before your period" to "{a}–{b} días antes de tu período",
     "{name}: usually {when} (in {n} of your last {m} cycles)" to "{name}: casi siempre {when} (en {n} de tus últimos {m} ciclos)",
-    "Your next period is the start of your last one plus your average cycle (the last 6 cycles; very short or very long ones are left out, as they are most likely a period that wasn't logged). Until two cycles are logged, the cycle length from Cycle settings is used. Ovulation is estimated {l} days before the next period, and the fertile window is the 5 days before it, that day and the day after. When your logs show ovulation (a temperature rise: three mornings above the six before, the third at least 0.2 °C higher; or a positive ovulation test), the next period is counted from there instead. Everything is worked out on this device from what you log." to
-        "Tu próximo período es el comienzo del último más tu ciclo promedio (los últimos 6 ciclos; los muy cortos o muy largos se dejan afuera, porque lo más probable es que falte anotar un período). Hasta que anotes dos ciclos, se usa la duración de Ajustes del ciclo. La ovulación se estima {l} días antes del próximo período, y la ventana fértil son los 5 días anteriores, ese día y el siguiente. Cuando lo que anotás muestra la ovulación (una subida de temperatura: tres mañanas por encima de las seis anteriores, la tercera al menos 0,2 °C más alta; o un test de ovulación positivo), el próximo período se cuenta desde ahí. Todo se calcula en este dispositivo con lo que anotás.",
+    "Your next period is the start of your last one plus your usual cycle: the middle length of your last 6 cycles, so one very long cycle (sometimes a month goes by without a period) or a very short one doesn't throw it off. Until two cycles are logged, the cycle length from Cycle settings is used. Ovulation is estimated {l} days before the next period, and the fertile window is the 5 days before it, that day and the day after. When your logs show ovulation (a temperature rise: three mornings above the six before, the third at least 0.2 °C higher; or a positive ovulation test), the next period is counted from there instead. Everything is worked out on this device from what you log." to
+        "Tu próximo período es el comienzo del último más tu ciclo habitual: la duración del medio de tus últimos 6 ciclos, así un ciclo muy largo (a veces pasa un mes sin período) o uno muy corto no lo cambia. Hasta que anotes dos ciclos, se usa la duración de Ajustes del ciclo. La ovulación se estima {l} días antes del próximo período, y la ventana fértil son los 5 días anteriores, ese día y el siguiente. Cuando lo que anotás muestra la ovulación (una subida de temperatura: tres mañanas por encima de las seis anteriores, la tercera al menos 0,2 °C más alta; o un test de ovulación positivo), el próximo período se cuenta desde ahí. Todo se calcula en este dispositivo con lo que anotás.",
     "Your cycles show here once two periods are logged." to "Tus ciclos aparecen acá cuando anotes dos períodos.",
     "What Ciclo is for right now" to "Para qué usás Ciclo ahora",
     "First day of your last period" to "Primer día de tu último período",
@@ -166,7 +166,7 @@ val ES_CYCLE: Map<String, String> = mapOf(
     "Units on this device" to "Unidades en este dispositivo",
     "Made on {date} by the Ciclo app from what was logged on this device." to "Hecho el {date} por la app Ciclo con lo anotado en este dispositivo.",
     "Summary" to "Resumen",
-    "Average cycle: {n} days" to "Ciclo promedio: {n} días",
+    "Usual cycle: {n} days" to "Ciclo habitual: {n} días",
     "from the settings" to "de los ajustes",
     "Shortest and longest recent cycle: {a} and {b} days" to "Ciclo reciente más corto y más largo: {a} y {b} días",
     "Average period: {n} days" to "Período promedio: {n} días",
