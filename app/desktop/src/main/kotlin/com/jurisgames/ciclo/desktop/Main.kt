@@ -176,7 +176,11 @@ fun main(args: Array<String>) {
             }, onSaveBackup = {
                 // U-C12: the whole journal in one file, the format Restore reads (locked with the backup password if set)
                 val dialog = FileDialog(null as Frame?, tr("Save a backup file"), FileDialog.SAVE).apply { file = "Ciclo-${java.time.LocalDate.now()}.ktbackup"; isVisible = true }
-                dialog.file?.let { File(dialog.directory, it) }?.let { f -> runCatching { node.writeBackup(f.path) } }
+                // and says how it went (S4-4: a failed save said nothing)
+                dialog.file?.let { File(dialog.directory, it) }?.let { f ->
+                    val ok = runCatching { node.writeBackup(f.path) }.isSuccess
+                    com.jurisgames.ciclo.ui.Notice.text = if (ok) tr("Backup saved") else tr("Couldn't save the backup")
+                }
             })
         }
     }

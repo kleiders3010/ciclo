@@ -184,6 +184,7 @@ private fun Home(env: Env, openedCode: String?) {
     val node = env.node
     val scope = rememberCoroutineScope()
     val snackbar = remember { SnackbarHostState() }
+    Notice.text?.let { t -> LaunchedEffect(t) { Notice.text = null; snackbar.showSnackbar(t) } }
     val lists = remember(node, env.version) { node.lists() }
     val current = ownJournal(node, lists)
     val partners = lists.filter { it.id != current?.id && runCatching { node.partnerIsView(it.id) }.getOrDefault(false) }
