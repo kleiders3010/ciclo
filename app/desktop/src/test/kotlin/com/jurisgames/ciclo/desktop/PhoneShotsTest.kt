@@ -62,7 +62,9 @@ class PhoneShotsTest {
         check(onAllNodes(hasText("Day 5 of your cycle", substring = true), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty() || System.getProperty("kt.lang") == "es") { "Today shows the cycle day" }
         check(onAllNodes(hasTestTag("notContraception"), useUnmergedTree = true).fetchSemanticsNodes().isNotEmpty()) { "Today says predictions are not birth control" }
         fun shot(name: String) {
-            if (fit) { problems += buttonsFit(w, name, OPEN_LISTS[name] ?: 0); return }
+            // APP-RULE 225: a store picture is fit-checked too, so a broken label never goes public
+            if (fit || store) problems += buttonsFit(w, name, OPEN_LISTS[name] ?: 0)
+            if (fit) return
             val o = out ?: return
             waitForIdle()
             val roots = onAllNodes(isRoot())
