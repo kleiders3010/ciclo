@@ -51,7 +51,7 @@ object Reminders {
         if (mode != "pregnant" && next != null) {
             if (p.period) {
                 val d = LocalDate.parse(next.start).minusDays(p.periodDays.toLong())
-                val text = if (p.periodDays == 0) tr("Your period may start today.") else tr("Your period may start in {n} days ({date}).", "n" to p.periodDays, "date" to shortDate(next.start))
+                val text = if (p.periodDays == 0) tr("Your period may start today.") else if (p.periodDays == 1) tr("Your period may start tomorrow ({date}).", "date" to shortDate(next.start)) else tr("Your period may start in {n} days ({date}).", "n" to p.periodDays, "date" to shortDate(next.start))
                 out += Due("period", at(d, p.morningAt), tr("Ciclo"), text)
             }
             if (p.fertile) out += Due("fertile", at(LocalDate.parse(next.fertileFrom), p.morningAt), tr("Ciclo"), tr("Your fertile window starts today (estimated)."))

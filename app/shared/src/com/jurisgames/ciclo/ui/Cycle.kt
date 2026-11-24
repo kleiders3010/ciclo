@@ -336,7 +336,7 @@ private fun TodayView(env: Env, list: ListItem, o: OutlookView, set: CycleSettin
                 if (set.mode != "pregnant" && o.lastStart.isEmpty()) androidx.compose.material3.Button(onClick = onPastPeriod,
                     modifier = Modifier.fillMaxWidth().padding(top = 8.dp).testTag("welcomePast")) { Text(tr("Add my last period")) }
                 if (set.mode != "pregnant" && o.lastStart.isNotEmpty()) Text(
-                    if (o.learned) tr("Estimated from your last cycles (usually {n} days).", "n" to o.avgCycle) else tr("Estimated from a {n}-day cycle until you have logged two.", "n" to o.avgCycle),
+                    if (o.learned) tr("Estimated from your last cycles (usually {n} days).", "n" to o.avgCycle) else tr("Estimated from a {n}-day cycle until you have logged two.", "n" to o.avgCycle), // n>=2: pinned: cycles are CYCLE_MIN 15 or more (cycle.rs)
                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
@@ -940,9 +940,9 @@ fun reportHtml(o: OutlookView, set: CycleSettings, days: List<CycleDay>, custom:
     sb.append("<html><head><meta charset=\"utf-8\"><style>body{font-family:sans-serif;font-size:12px}table{border-collapse:collapse}td,th{border:1px solid #999;padding:3px 6px;text-align:left}h1{font-size:18px}h2{font-size:14px;margin-top:16px}</style></head><body>")
     sb.append("<h1>").append(esc(tr("Cycle report"))).append("</h1><p>").append(esc(tr("Made on {date} by the Ciclo app from what was logged on this device.", "date" to today()))).append("</p>")
     sb.append("<h2>").append(esc(tr("Summary"))).append("</h2><ul>")
-    sb.append("<li>").append(esc(tr("Usual cycle: {n} days", "n" to o.avgCycle))).append(if (o.learned) "" else esc(" (" + tr("from the settings") + ")")).append("</li>")
+    sb.append("<li>").append(esc(tr("Usual cycle: {n} days", "n" to o.avgCycle))).append(if (o.learned) "" else esc(" (" + tr("from the settings") + ")")).append("</li>") // n>=2: pinned: CYCLE_MIN 15
     if (o.learned) sb.append("<li>").append(esc(tr("Shortest and longest recent cycle: {a} and {b} days", "a" to o.shortest, "b" to o.longest))).append("</li>")
-    sb.append("<li>").append(esc(tr("Average period: {n} days", "n" to o.avgPeriod))).append("</li>")
+    sb.append("<li>").append(esc(if (o.avgPeriod == 1L) tr("Average period: 1 day") else tr("Average period: {n} days", "n" to o.avgPeriod))).append("</li>")
     if (o.lastStart.isNotEmpty()) sb.append("<li>").append(esc(tr("Last period started: {date}", "date" to fullDate(o.lastStart)))).append("</li>")
     if (set.bc.isNotEmpty()) sb.append("<li>").append(esc(tr("Birth control: {kind}", "kind" to tr(Words.BIRTH_CONTROL.first { it.first == set.bc }.second)))).append("</li>")
     if (set.mode == "pregnant" && o.due.isNotEmpty()) sb.append("<li>").append(esc(tr("Due date: {date}", "date" to fullDate(o.due)))).append("</li>")
