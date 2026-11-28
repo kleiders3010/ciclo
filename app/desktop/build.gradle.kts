@@ -23,7 +23,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(org.jetbrains.compose.desktop.application.dsl.TargetFormat.Msi)
             packageName = "Ciclo"
-            packageVersion = "1.0.0"
+            packageVersion = "1.0.1"
             vendor = "Juris Games"
             description = "Period and cycle journal, no accounts, free"
             // JNA needs sun.misc.Unsafe; the rest is Compose's default runtime.
