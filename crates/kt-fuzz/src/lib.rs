@@ -19,7 +19,7 @@ use std::time::{Duration, Instant};
 
 pub const DEFAULT_ITERS: u64 = 2_000;
 const MAX_LEN: usize = 256 * 1024;
-/// One input taking longer than this is reported as a hang.
+/// One input taking longer than this twice in a row is reported as a hang.
 const SLOW: Duration = Duration::from_secs(5);
 
 /// xorshift64*: tiny and deterministic.
@@ -118,7 +118,11 @@ fn failure_dir() -> PathBuf {
 
 /// Fuzz `target` for `iters` (or `KT_FUZZ_ITERS` × `scale`) inputs derived from `seeds`.
 /// Panics with the saved input's path on the first input that panics or hangs.
-pub fn run(name: &str, seeds: &[Vec<u8>], scale: f64, mut target: impl FnMut(&[u8])) {
+pub fn run(name: &str, seeds: &[Vec<u8>], scale: f64, target: impl FnMut(&[u8])) {
+    run_timed(name, seeds, scale, SLOW, target)
+}
+
+fn run_timed(name: &str, seeds: &[Vec<u8>], scale: f64, limit: Duration, mut target: impl FnMut(&[u8])) {
     assert!(!seeds.is_empty(), "{name}: no seeds");
     let n = ((iters() as f64) * scale).max(1.0) as u64;
     let mut rng = Rng::new(seed() ^ name.bytes().fold(0u64, |h, b| h.wrapping_mul(31).wrapping_add(b as u64)));
@@ -136,7 +140,13 @@ pub fn run(name: &str, seeds: &[Vec<u8>], scale: f64, mut target: impl FnMut(&[u
         };
         let started = Instant::now();
         let outcome = catch_unwind(AssertUnwindSafe(|| target(&input)));
-        let slow = started.elapsed() > SLOW;
+        let mut slow = started.elapsed() > limit;
+        if slow && outcome.is_ok() {
+            // A busy machine can stall one call (a worker process starting late): time it again before calling it a hang.
+            let again = Instant::now();
+            let second = catch_unwind(AssertUnwindSafe(|| target(&input)));
+            slow = second.is_err() || again.elapsed() > limit;
+        }
         if outcome.is_err() || slow {
             let dir = failure_dir();
             let _ = std::fs::create_dir_all(&dir);
@@ -164,6 +174,22 @@ mod tests {
     fn a_panicking_target_is_caught_and_saved() {
         let r = catch_unwind(|| run("selftest", &[b"hello".to_vec()], 1.0, |b| assert!(!b.contains(&0xff))));
         assert!(r.is_err(), "the 0xff mutation eventually trips the assert");
+    }
+
+    /// pinned: a busy PC can stall one call (a worker process starting late); only an input that is slow
+    /// twice in a row is a hang (2026-11-27: app-restore failed on its own valid seed, then passed).
+    #[test]
+    fn one_slow_call_is_timed_again_and_a_real_hang_still_fails() {
+        let limit = Duration::from_millis(50);
+        let mut calls = 0;
+        run_timed("selftest-stall", &[b"x".to_vec()], 0.001, limit, |_| {
+            calls += 1;
+            if calls == 1 {
+                std::thread::sleep(Duration::from_millis(120));
+            }
+        });
+        let r = catch_unwind(|| run_timed("selftest-hang", &[b"x".to_vec()], 0.001, limit, |_| std::thread::sleep(Duration::from_millis(120))));
+        assert!(r.is_err(), "slow every time = a hang");
     }
 
     #[test]
